@@ -25,4 +25,4 @@ jobs:
 
       - name: Run the Python script
         run: |
-          python your_script.py  # Replace with the name of your Python script
+          python run_all.py  # Replace with the name of your Python script
