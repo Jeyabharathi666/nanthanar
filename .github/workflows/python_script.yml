@@ -1,25 +1,20 @@
-name: Google Sheets Auto Update
+name: Run Scrapers Every 5 Minutes
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # ⏱ Runs every 5 minutes
-  workflow_dispatch:        # Allows manual trigger from GitHub UI
+    - cron: '*/5 * * * *'  # every 5 minutes
+  workflow_dispatch:
 
 jobs:
-  run-script:
+  run-scrapers:
     runs-on: ubuntu-latest
 
     env:
-      sanjay: ${{ secrets.SANJAY }}
+      GOOGLE_SERVICE_ACCOUNT_JSON_: ${{ secrets.sanjay }}
 
     steps:
-      - name: 📥 Checkout repository
+      - name: 📥 Checkout code
         uses: actions/checkout@v3
-
-      - name: 🐍 Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
 
       - name: 📦 Install dependencies
         run: |
@@ -27,8 +22,11 @@ jobs:
           pip install gspread oauth2client google-auth playwright playwright_stealth
           python -m playwright install --with-deps
 
-
-
-      - name: 🚀 Run script
-        run: python run_all.py  # 🔄 Change to your actual script filename
+      - name: 🚀 Run scraping scripts
+        run: |
+          python trendlyne1.py
+          python economic_times.py
+          python business_standard.py
+          python moneycontrol.py
+          python monaca.py
 
