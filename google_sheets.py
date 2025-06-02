@@ -12,7 +12,7 @@ SCOPES = [
 def get_google_credentials():
     raw_json = os.environ["GOOGLE_SERVICE_ACCOUNT_JSON_"]
     json_dict = json.loads(raw_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(json_dict, scope)
+    creds = Credentials.from_service_account_info(json_dict, scopes=scope)
     return creds
 
 def update_google_sheet_by_name(sheet_id, worksheet_name, headers, rows):
