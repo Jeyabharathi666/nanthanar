@@ -1,2 +1,3 @@
-*.json
-"pags-429207-03ef3b521109.json" 
+# .gitignore
+*.json           # Excludes all JSON files
+!pags-429207-03ef3b521109.json  # Except this one
