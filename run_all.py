@@ -9,6 +9,7 @@ scripts = [
     'economic_times.py',
     'business_standard.py',
     'moneycontrol.py',
+    'monaca.py'
     #'Tbrain.py'
 ]
 
