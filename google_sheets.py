@@ -8,9 +8,10 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 
 
 def get_google_credentials():
-    creds = ServiceAccountCredentials.from_json_keyfile_name("pags-429207-03ef3b521109.json", scope)
+    raw_json = os.environ["GOOGLE_SERVICE_ACCOUNT_JSON_"]
+    json_dict = json.loads(raw_json)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(json_dict, scope)
     return creds
-
 
 def authorize_google_sheets(credentials):
     return gspread.authorize(credentials)
