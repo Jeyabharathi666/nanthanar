@@ -172,14 +172,19 @@ for row in rows_to_add:
 
 print("Data added to Google Sheet!")'''
 
-
+import os
+import json
 import gspread
+from google.oauth2.service_account import Credentials
 from oauth2client.service_account import ServiceAccountCredentials
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
 
+
 def get_google_credentials():
-    creds = ServiceAccountCredentials.from_json_keyfile_name("eng-flux-421206-009c2355c702.json", scope)
+    # Read from GitHub Secrets
+    service_account_info = json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON'])
+    creds = Credentials.from_service_account_info(service_account_info)
     return creds
 
 def authorize_google_sheets(credentials):
