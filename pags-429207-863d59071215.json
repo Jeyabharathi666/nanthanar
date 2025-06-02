@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "pags-429207",
+  "private_key_id": "863d59071215ad3d111476f48f8c4802695e6110",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCgkaObZVF/mc9h\nxUxw6emve397pJe1TZCCilUdeHLljTMmzC9BG6sTFaey/CytwacRy4qrApEEL8xB\nRaH+QkAJeoF9TkNt1dq8LNDdBc4b+jMIlgCt39zyNj1F2TkMmbu1+y/oujSArhsc\nvnOa3VSiqaqBAWJjLQHLZt3HQlRyN6ZcraGN2dJMOKvIKm+5/VCMxcfGBA2azN9s\nbLobpSk8fq+g14GnEjWvRARYvbcDwDQNekKeeGJQaaqf06yalzIi5gfBG1udE7+Y\nRPSA2+lNdXeJbSu8+QaZdiap/BgI3XRuAATawffEyq5VUoCkRmWDRnd9C7O1Xsmc\nKexiLbTZAgMBAAECggEAKF2kly7H57+nkmkyt9oeLMbrvA4bM3F96EtVbXS30byH\nBPRk1sXZYpFZmNXrd30M/pzAThB1m2tWunwCZvSJu7hH8FPqAKU3+YF8umu4rnDe\nPoTTQ+LY3S1Ehxg+TswhE/VDTIrvIwBiAX5heqe0nLXxjr/l14/beSJxk6O5rgKo\nGcSGIUGmmV7sPkb0Yv+jt5DY4Mq3qMdZw2LqUTnZzJyH73pP0MWiltE3FwZq9LWQ\nqaM8+juSRTGZQ9NAOrcVaaSWMSL8vPkbt9RRlhOrkgQPSx03PePSCjwCqi5Odjr0\nrKNezyxXO+k93zXsUDXKwUxNWUTNUtdCekM7IsmU1wKBgQDeRTG6P0t+5/mK4Xyj\nIrGwIn5dMSr2o3hEhEWIF8sYrhPSR7DB098LIAbPqzob3eh2wt2DwhQmjLAs3Jrc\n5nvFI8HnLG2WL0W7ccy2d12V+xygKvWNb2VN0CwTNdd/Ps68nQkIBukNBB6Upx7W\nZoVdjwoY8RzfnGtSelo4lJ8K5wKBgQC473SiHFz2iufFVsi7bgSJMKmIh3nTXACi\nye+ukTdJLZ3wJD9lah+XGj9AIC+hSJAEWDew4IAp0lEnGW2AJ/iGYfDgg2HIkXmi\nBwEUvPS5dZPzn2DHiDWlkIz+L8hx92ozZ+UGt4jLrBmb/BkeGZRUASWuZX0wMrRQ\nJXWm89sKPwKBgFXYo7wrdh0tu1PIgzr+y2Ib8HJN6yoXOPw9mh1WEzsVANLWnY4/\nJoZFeFv85hSdQIud97BL5Tx+Wgz5p1ZqLqOVi+6dWjYHTAd5jHds4thqhEPYU76s\np5PGMz+4K+MZfv+aJ0LSaHB+htEjOuXT8u6PsHaxqVU0NL9GQlJYFJVBAoGAej4O\nInoNGQqIWXEcDoiShvybk5u5c3SFFxXUUNe8a6qzk2DiZu7XItI+rOyZj0qfp7+I\nUGqVTQ+whN/R+bxyEqH6zu0JXcKLXAa1ODgOq+iEe60GE959V4tNJ1f+bxbUJFaw\nlNgMnFSOOQVStQrDeSOo/LYpIgriFXgtZMYcK5ECgYA7F7AZgzxu8UCGFtViOkZt\nWZ0+qj8QAUdPgPOVwtpmRE4Y473JQFIa7AX481vBEE6BmbtvEWPtsoWaEbtY7tK0\n+uuswtAhHXiJa2YXOeS4GadnIpD1zbRhIKEyEf8L43kokh8FnFEifJK2MsAD6PoK\nddNRi9/OO017IhOHlbENyQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "moneyconana@pags-429207.iam.gserviceaccount.com",
+  "client_id": "107648556191646281489",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/moneyconana%40pags-429207.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
