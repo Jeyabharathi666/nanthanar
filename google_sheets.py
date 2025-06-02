@@ -10,7 +10,7 @@ SCOPES = [
 ]
 
 def get_google_credentials():
-    raw_json = os.environ["SANJAY"]  # this must match your GitHub secret name
+    raw_json = os.environ["GOOGLE_SERVICE_ACCOUNT_JSON_"]
     json_dict = json.loads(raw_json)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(json_dict, scope)
     return creds
