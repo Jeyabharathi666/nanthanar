@@ -24,13 +24,8 @@ jobs:
           pip install playwright gspread oauth2client playwright-stealth
           playwright install chromium
 
-      - name: 🔐 Set up credentials
-        run: |
-          echo '${{ secrets.GSHEET_KEY }}' > pags-429207-03ef3b521109.json
-      - name: 🔐 Set GOOGLE_SERVICE_ACCOUNT_JSON_ as env variable
+      - name: 🔐 Export GOOGLE_SERVICE_ACCOUNT_JSON_ from secret
         run: echo "GOOGLE_SERVICE_ACCOUNT_JSON=${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_ }}" >> $GITHUB_ENV
-
 
       - name: 🚀 Run Python script
         run: python run_all.py
-
