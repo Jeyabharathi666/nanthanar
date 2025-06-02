@@ -10,15 +10,8 @@ SCOPES = [
 ]
 
 def get_google_credentials():
-    raw_json = os.environ.get("GOOGLE")
-    if not raw_json:
-        raise EnvironmentError("Missing environment variable: GOOGLE")
-    json_dict = json.loads(raw_json)
-    creds = Credentials.from_service_account_info(json_dict, scopes=SCOPES)
+    creds = Credentials.from_service_account_file("pags-429207-863d59071215.json")
     return creds
-
-def authorize_google_sheets(credentials):
-    return gspread.authorize(credentials)
 
 def update_google_sheet_by_name(sheet_id, worksheet_name, headers, rows):
     try:
