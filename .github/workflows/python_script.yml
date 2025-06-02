@@ -27,7 +27,7 @@ jobs:
       - name: 🔐 Set up credentials
         run: |
           echo '${{ secrets.GSHEET_KEY }}' > pags-429207-03ef3b521109.json
-      - name: 🔐 Set GOOGLE_SERVICE_ACCOUNT_JSON as env variable
+      - name: 🔐 Set GOOGLE_SERVICE_ACCOUNT_JSON_ as env variable
         run: echo "GOOGLE_SERVICE_ACCOUNT_JSON=${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_ }}" >> $GITHUB_ENV
 
 
