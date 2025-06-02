@@ -10,9 +10,9 @@ SCOPES = [
 ]
 
 def get_google_credentials():
-    raw_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON_")
+    raw_json = os.environ.get("GOOGLE")
     if not raw_json:
-        raise EnvironmentError("Missing environment variable: GOOGLE_SERVICE_ACCOUNT_JSON_")
+        raise EnvironmentError("Missing environment variable: GOOGLE")
     json_dict = json.loads(raw_json)
     creds = Credentials.from_service_account_info(json_dict, scopes=SCOPES)
     return creds
