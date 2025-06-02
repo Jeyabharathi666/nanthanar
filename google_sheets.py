@@ -2,15 +2,19 @@ import os
 import json
 import gspread
 from google.oauth2.service_account import Credentials
-from oauth2client.service_account import ServiceAccountCredentials
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
-
+# Updated scope list for Google Sheets & Drive API
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
 
 def get_google_credentials():
-    raw_json = os.environ["GOOGLE_SERVICE_ACCOUNT_JSON_"]
+    raw_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON_")
+    if not raw_json:
+        raise EnvironmentError("Missing environment variable: GOOGLE_SERVICE_ACCOUNT_JSON_")
     json_dict = json.loads(raw_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(json_dict, scope)
+    creds = Credentials.from_service_account_info(json_dict, scopes=SCOPES)
     return creds
 
 def authorize_google_sheets(credentials):
@@ -40,12 +44,7 @@ def append_footer(sheet_id, worksheet_name, footer_row):
         credentials = get_google_credentials()
         gc = authorize_google_sheets(credentials)
         worksheet = gc.open_by_key(sheet_id).worksheet(worksheet_name)
-
-        # Get number of columns from the sheet
-        
-
         worksheet.append_row(footer_row)
         print("🕒 Timestamp footer appended.")
     except Exception as e:
         print(f"❌ Footer append error: {e}")
-
