@@ -9,6 +9,9 @@ jobs:
   run-scrapers:
     runs-on: ubuntu-latest
 
+    env:
+      NEW: ${{ secrets.NEW }}
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v3
@@ -21,9 +24,4 @@ jobs:
 
       - name: 🚀 Run scraping scripts
         run: |
-          python trendlyne1.py
-          python economic_times.py
-          python business_standard.py
-          python moneycontrol.py
-          python monaca.py
-
+          python run_all.py
