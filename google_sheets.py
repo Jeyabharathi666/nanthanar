@@ -1,7 +1,7 @@
 '''import gspread
 from google.oauth2.service_account import Credentials
 
-SERVICE_ACCOUNT_FILE = "eng-flux-421206-009c2355c702.json"
+SERVICE_ACCOUNT_FILE = "pags-429207-03ef3b521109.json"
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
 def get_google_credentials():
