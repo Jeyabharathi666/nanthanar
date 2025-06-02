@@ -10,7 +10,9 @@ SCOPES = [
 ]
 
 def get_google_credentials():
-    creds = Credentials.from_service_account_file("pags-429207-863d59071215.json")
+    raw_json = os.environ["SANJAY"]  # this must match your GitHub secret name
+    json_dict = json.loads(raw_json)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(json_dict, scope)
     return creds
 
 def update_google_sheet_by_name(sheet_id, worksheet_name, headers, rows):
