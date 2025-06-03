@@ -25,7 +25,7 @@ def scrape_business_standard():
             page.goto(URL, wait_until="domcontentloaded")
             print("🌐 Page loaded. Extracting data...")
 
-            page.wait_for_selector("table tbody tr", timeout=60000)
+            page.wait_for_selector("table tbody tr", timeout=180000)
 
             headers = [
                 "Company", "Action", "Target Price (₹)", "Broker", "Date"
