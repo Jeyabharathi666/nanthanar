@@ -9,7 +9,7 @@ def scrape_economictimes():
     print("Starting the scraping process...")
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
         page.goto(URL)
