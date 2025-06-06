@@ -17,7 +17,7 @@ def scrape_moneycontrol():
 
             print("🌐 Navigating to the Analysts' Choice page...")
             page.goto(URL)
-            page.wait_for_selector("div.AnylyticCardsSec_web_anylyticsCard__K0OB7", timeout=60000)
+            page.wait_for_selector("div.AnylyticCardsSec_web_anylyticsCard__K0OB7", timeout=180000)
             time.sleep(2)
 
             cards = page.query_selector_all("div.AnylyticCardsSec_web_anylyticsCard__K0OB7")
