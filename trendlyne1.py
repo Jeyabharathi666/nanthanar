@@ -50,3 +50,4 @@ def scrape_trend():
     except Exception as e:
         print(f"❌ Error during scraping or sheet update: {e}")
 scrape_trend()
+print("trend")
