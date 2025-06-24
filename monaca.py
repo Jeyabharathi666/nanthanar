@@ -19,7 +19,7 @@ def scrape_moneycontrol():
             print("✅ DOM loaded. Waiting for JS content...")
             page.wait_for_timeout(4000)  # 7 sec for content to render
 
-            cards = page.query_selector_all("div.AnylyticCardsSec_web_analyticContain__POhgA")
+            cards = page.query_selector_all("div.AnylyticCardsSec_web_anylyticsCard__K0OB7")
             print(f"✅ Found {len(cards)} cards.")
 
             headers = ["Name", "Low", "Avg", "High", "Based", "CurrentPrice", "Buys", "Holds"]
