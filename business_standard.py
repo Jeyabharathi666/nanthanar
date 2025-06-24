@@ -56,4 +56,3 @@ def scrape_business_standard():
         print(f"❌ Fatal error: {e}")
 
 scrape_business_standard()
-print("business standard completed")
