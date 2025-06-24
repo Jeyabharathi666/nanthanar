@@ -1,4 +1,4 @@
-'''from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright
 from playwright_stealth import stealth_sync
 from datetime import datetime
 import google_sheets
@@ -25,7 +25,7 @@ def scrape_business_standard():
             page.goto(URL, wait_until="domcontentloaded")
             print("🌐 Page loaded. Extracting data...")
 
-            page.wait_for_selector("table tbody tr", timeout=180000)
+            page.wait_for_selector("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr", timeout=180000)
 
             headers = [
                 "Company", "Action", "Target Price (₹)", "Broker", "Date"
@@ -58,7 +58,8 @@ def scrape_business_standard():
 
     except Exception as e:
         print(f"❌ Error occurred: {e}")
-scrape_business_standard()'''
+scrape_business_standard()
+'''
 
 
 from datetime import datetime
@@ -119,4 +120,4 @@ def scrape_business_standard():
         print(f"❌ Fatal error: {e}")
 
 scrape_business_standard()
-
+'''
