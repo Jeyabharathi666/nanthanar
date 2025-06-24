@@ -57,4 +57,4 @@ def scrape_moneycontrol():
         print(f"❌ Error occurred: {e}")
 
 scrape_moneycontrol()
-
+print("analystic")
