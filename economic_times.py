@@ -54,3 +54,4 @@ def scrape_economictimes():
         browser.close()
 
 scrape_economictimes()
+print("economic times")
