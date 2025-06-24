@@ -6,6 +6,7 @@ URL = "https://www.business-standard.com/markets/research-report"
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
 WORKSHEET_NAME = "bis"
 
+print("business standard")
 def scrape_business_standard():
     print("🚀 Starting the scraping process...")
 
@@ -56,3 +57,4 @@ def scrape_business_standard():
         print(f"❌ Fatal error: {e}")
 
 scrape_business_standard()
+print("business completed")
