@@ -1,4 +1,4 @@
-from playwright.sync_api import sync_playwright
+'''from playwright.sync_api import sync_playwright
 from playwright_stealth import stealth_sync
 from datetime import datetime
 import google_sheets
@@ -75,7 +75,7 @@ def scrape_business_standard():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=False)
+            browser = p.chromium.launch(headless=True)
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 viewport={"width": 1280, "height": 800},
@@ -120,4 +120,4 @@ def scrape_business_standard():
         print(f"❌ Fatal error: {e}")
 
 scrape_business_standard()
-'''
+
