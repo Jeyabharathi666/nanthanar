@@ -15,7 +15,7 @@ def scrape_moneycontrol():
             page = browser.new_page()
 
             print("🌐 Navigating to Analysts' Choice page...")
-            page.goto(URL, wait_until="domcontentloaded", timeout=90000)
+            page.goto(URL, wait_until="domcontentloaded", timeout=150000)
             print("✅ DOM loaded. Waiting for JS content...")
             page.wait_for_timeout(7000)  # 7 sec for content to render
 
