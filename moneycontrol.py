@@ -17,7 +17,7 @@ def scrape_moneycontrol():
 
             print("🌐 Navigating to the Stock Ideas page...")
             # ✅ No more load wait, just domcontentloaded
-            page.goto(URL, wait_until="domcontentloaded", timeout=90000)
+            page.goto(URL, wait_until="domcontentloaded", timeout=150000)
             print("✅ DOM content loaded. Waiting for page to render fully...")
             page.wait_for_timeout(7000)  # give time for JS to load cards
 
