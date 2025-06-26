@@ -1,29 +1,37 @@
 from datetime import datetime
 from playwright.sync_api import sync_playwright
+from playwright_stealth import stealth_sync
+
+
 import google_sheets
 
 URL = "https://www.business-standard.com/markets/research-report"
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
 WORKSHEET_NAME = "bis"
 
-print("business standard")
 def scrape_business_standard():
     print("🚀 Starting the scraping process...")
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=False)
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 viewport={"width": 1280, "height": 800},
                 locale="en-US"
             )
             page = context.new_page()
+            stealth_sync(page)  # 👈 Add this back in!
+
+            page.evaluate("""() => {Object.defineProperty(navigator, 'webdriver', { get: () => false });}""")
+            page.goto(URL, timeout=60000)
 
             # GO TO PAGE without networkidle
-            page.goto(URL, timeout=150000)  # Allow up to 60s if slow network
+            page.goto(URL, timeout=60000)  # Allow up to 60s if slow network
             print("🌐 Page requested. Waiting fixed time for content...")
-            page.wait_for_selector("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr", timeout=20000)  # 10 seconds fixed wait
+            page.wait_for_timeout(10_000)  # 10 seconds fixed wait
+            
+
 
             # SCRAPE
             trs = page.query_selector_all("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr")
@@ -57,4 +65,3 @@ def scrape_business_standard():
         print(f"❌ Fatal error: {e}")
 
 scrape_business_standard()
-print("business completed")
