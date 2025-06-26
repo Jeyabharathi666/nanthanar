@@ -11,7 +11,7 @@ def scrape_business_standard():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=False)  # You can set True later for GitHub
+            browser = p.chromium.launch(headless=True)  # You can set True later for GitHub
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 viewport={"width": 1280, "height": 800},
