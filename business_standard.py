@@ -23,7 +23,7 @@ def scrape_business_standard():
             # GO TO PAGE without networkidle
             page.goto(URL, timeout=150000)  # Allow up to 60s if slow network
             print("🌐 Page requested. Waiting fixed time for content...")
-            page.wait_for_timeout(10000)  # 10 seconds fixed wait
+            page.wait_for_selector("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr", timeout=20000)  # 10 seconds fixed wait
 
             # SCRAPE
             trs = page.query_selector_all("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr")
