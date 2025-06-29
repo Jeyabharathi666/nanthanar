@@ -1,3 +1,4 @@
+import os
 from playwright.sync_api import sync_playwright
 import google_sheets
 from datetime import datetime
@@ -11,15 +12,17 @@ def scrape_moneycontrol():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            is_ci = os.getenv("CI") == "true"
+            browser = p.chromium.launch(headless=is_ci,args=["--no-sandbox", "--disable-setuid-sandbox"] if is_ci else [])
             page = browser.new_page()
 
             print("🌐 Navigating to Analysts' Choice page...")
-            page.goto(URL, wait_until="domcontentloaded", timeout=150000)
+            page.goto(URL, wait_until="domcontentloaded", timeout=90000)
             print("✅ DOM loaded. Waiting for JS content...")
-            page.wait_for_timeout(7000)  # 7 sec for content to render
+            page.wait_for_timeout(4000)
 
-            cards = page.query_selector_all("div.AnylyticCardsSec_web_anylyticsCard__K0OB7")
+            page.wait_for_selector("div[class*='AnylyticCardsSec_web_anylyticsCard']", timeout=15000)
+            cards = page.query_selector_all("div[class*='AnylyticCardsSec_web_anylyticsCard']")
             print(f"✅ Found {len(cards)} cards.")
 
             headers = ["Name", "Low", "Avg", "High", "Based", "CurrentPrice", "Buys", "Holds"]
@@ -56,5 +59,5 @@ def scrape_moneycontrol():
     except Exception as e:
         print(f"❌ Error occurred: {e}")
 
-scrape_moneycontrol()
-print("analystic")
+if __name__ == "__main__":
+    scrape_moneycontrol()
