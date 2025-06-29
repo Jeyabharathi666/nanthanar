@@ -32,5 +32,10 @@ typing_extensions==4.13.0
 tzdata==2025.2
 urllib3==2.3.0
 pygsheets==2.0.5
+playwright
+python-dotenv
+google-api-python-client
+google-auth
+google-auth-oauthlib
 
 
