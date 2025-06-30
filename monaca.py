@@ -1,3 +1,4 @@
+print("analysts")
 import os
 from playwright.sync_api import sync_playwright
 import google_sheets
@@ -55,9 +56,12 @@ def scrape_moneycontrol():
             google_sheets.append_footer(SHEET_ID, WORKSHEET_NAME, [ts])
 
             browser.close()
+            
 
     except Exception as e:
         print(f"❌ Error occurred: {e}")
 
 if __name__ == "__main__":
     scrape_moneycontrol()
+    
+print("analysts")
