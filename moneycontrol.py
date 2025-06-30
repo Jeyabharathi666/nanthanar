@@ -1,3 +1,4 @@
+print("control")
 import os
 from playwright.sync_api import sync_playwright
 import google_sheets
@@ -60,3 +61,4 @@ def scrape_moneycontrol():
 
 if __name__ == "__main__":
     scrape_moneycontrol()
+print("control")
