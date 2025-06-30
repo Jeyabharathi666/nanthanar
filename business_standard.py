@@ -1,3 +1,4 @@
+print("business")
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 import google_sheets
@@ -62,3 +63,4 @@ def scrape_business_standard():
         print(f"❌ Fatal error: {e}")
 
 scrape_business_standard()
+print("business")
