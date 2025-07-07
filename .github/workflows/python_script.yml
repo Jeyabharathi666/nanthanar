@@ -27,4 +27,4 @@ jobs:
 
       - name: 🚀 Run scraping scripts
         run: |
-          python moneycontrol.py
+          python run_all.py
