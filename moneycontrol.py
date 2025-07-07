@@ -4,7 +4,6 @@ from playwright.sync_api import sync_playwright
 import google_sheets
 from datetime import datetime
 import os
-import time
 
 URL = "https://www.moneycontrol.com/markets/stock-ideas"
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
@@ -30,7 +29,7 @@ def scrape_moneycontrol():
 
             page = context.new_page()
 
-            # Stealth patch
+            # Stealth anti-bot patch
             page.add_init_script("""
             Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
             window.navigator.chrome = { runtime: {} };
@@ -40,9 +39,8 @@ def scrape_moneycontrol():
 
             print("🌐 Navigating to:", URL)
             page.goto(URL, wait_until="networkidle", timeout=60000)
-            page.wait_for_timeout(3000)  # Give time for JavaScript to render
+            page.wait_for_timeout(3000)  # wait for dynamic JS content
 
-            # Try selector again
             page.wait_for_selector("div.InfoCardsSec_web_stckCard__X8CAV", timeout=20000)
             cards = page.query_selector_all("div.InfoCardsSec_web_stckCard__X8CAV")
             print(f"✅ Found {len(cards)} cards.")
