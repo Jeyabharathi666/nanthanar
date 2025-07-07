@@ -1,32 +1,39 @@
 import subprocess
 import time
+from flask import Flask
 
-# Your actual script filenames
-scripts = [
-    #'5paisa.py',
-    'trendlyne1.py',
-  #  'Equitymaster - Penny Stocks.py',
-    'economic_times.py',
-    'business_standard.py',
-    'moneycontrol.py',
-    'monaca.py'
-    #'Tbrain.py'
-]
+app = Flask(__name__)
 
-# Delay between launching each script (in seconds)
-delay_between_scripts = 15  # Adjust if needed (e.g., 10–30 seconds)
+@app.route("/")
+def home():
+    return "Moneycontrol multi-script scraper is running."
 
-processes = []
+def run_all_scripts():
+    scripts = [
+        'trendlyne1.py',
+        'economic_times.py',
+        'business_standard.py',
+        'moneycontrol.py',
+        'monaca.py'
+    ]
 
-# Start scripts with delay
-for script in scripts:
-    print(f"🚀 Launching {script}...")
-    process = subprocess.Popen(['python', script])
-    processes.append(process)
-    time.sleep(delay_between_scripts)  # ⏳ Delay before next script
+    delay_between_scripts = 15  # seconds
+    processes = []
 
-# Wait for all to finish
-for process in processes:
-    process.wait()
+    for script in scripts:
+        print(f"🚀 Launching {script}...")
+        process = subprocess.Popen(['python', script])
+        processes.append(process)
+        time.sleep(delay_between_scripts)
 
-print("✅ All scripts have finished running.")
+    for process in processes:
+        process.wait()
+
+    print("✅ All scripts have finished running.")
+
+if __name__ == "__main__":
+    # Run the scripts once when server starts
+    run_all_scripts()
+
+    # Keep the server alive
+    app.run(host="0.0.0.0", port=10000)
