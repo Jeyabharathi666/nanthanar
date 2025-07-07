@@ -3,8 +3,8 @@ print("📊 Moneycontrol Stock Ideas Scraper Starting...")
 from playwright.sync_api import sync_playwright
 import google_sheets
 from datetime import datetime
-import time
 import os
+import time
 
 URL = "https://www.moneycontrol.com/markets/stock-ideas"
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
@@ -21,13 +21,16 @@ def scrape_moneycontrol():
                 headless=True,
                 args=["--no-sandbox", "--disable-setuid-sandbox"] if is_ci else []
             )
+
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                viewport={"width": 1280, "height": 800},
                 locale="en-US"
             )
+
             page = context.new_page()
 
-            # Optional stealth patch to avoid blocking
+            # Stealth patch
             page.add_init_script("""
             Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
             window.navigator.chrome = { runtime: {} };
@@ -36,11 +39,11 @@ def scrape_moneycontrol():
             """)
 
             print("🌐 Navigating to:", URL)
-            page.goto(URL, timeout=60000, wait_until="networkidle")
-            page.wait_for_timeout(3000)  # buffer for AJAX content
+            page.goto(URL, wait_until="networkidle", timeout=60000)
+            page.wait_for_timeout(3000)  # Give time for JavaScript to render
 
-            # Confirm page structure exists
-            page.wait_for_selector("div.InfoCardsSec_web_stckCard__X8CAV", timeout=15000)
+            # Try selector again
+            page.wait_for_selector("div.InfoCardsSec_web_stckCard__X8CAV", timeout=20000)
             cards = page.query_selector_all("div.InfoCardsSec_web_stckCard__X8CAV")
             print(f"✅ Found {len(cards)} cards.")
 
@@ -59,27 +62,31 @@ def scrape_moneycontrol():
                     if (el := card.query_selector("ul li:nth-child(3) span")): current_return = el.inner_text().strip()
 
                     row = [date, name, action, target, current_return, reco_price]
-                    if any(val != "N/A" for val in row):
+                    if any(f != "N/A" for f in row):
                         rows.append(row)
 
                 except Exception as e_card:
-                    print(f"⚠️ Error parsing a card: {e_card}")
+                    print(f"⚠️ Error parsing card: {e_card}")
                     continue
 
-            print(f"📝 Prepared {len(rows)} valid rows for Google Sheets.")
+            print(f"📝 Prepared {len(rows)} valid rows.")
 
             if rows:
                 google_sheets.update_google_sheet_by_name(SHEET_ID, WORKSHEET_NAME, headers, rows)
                 timestamp = datetime.now().strftime("Last updated: %Y-%m-%d %H:%M:%S")
                 google_sheets.append_footer(SHEET_ID, WORKSHEET_NAME, [timestamp])
-                print("✅ Google Sheet updated.")
+                print("✅ Data updated in worksheet:", WORKSHEET_NAME)
             else:
-                print("⚠️ No data rows to update.")
+                print("⚠️ No data rows extracted.")
 
             browser.close()
-            print("🧹 Browser closed.")
 
     except Exception as e:
+        print(f"❌ Fatal error: {e}")
+
+scrape_moneycontrol()
+print("✅ Script completed.")
+
         print(f"❌ Fatal error: {e}")
 
 scrape_moneycontrol()
