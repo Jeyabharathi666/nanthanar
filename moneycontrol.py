@@ -7,8 +7,7 @@ from datetime import datetime
 URL = "https://www.moneycontrol.com/markets/stock-ideas"
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
 WORKSHEET_NAME = "mons"
-
-USE_STEALTH = True  # Optional stealth patch toggle
+USE_STEALTH = True  # Set to False if you want to disable stealth
 
 def scrape_moneycontrol():
     print("📊 Moneycontrol Stock Ideas Scraper Starting...")
@@ -28,7 +27,7 @@ def scrape_moneycontrol():
             )
             page = context.new_page()
 
-            # Optional stealth JS patch
+            # Optional stealth
             if USE_STEALTH:
                 page.add_init_script("""
                     Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
@@ -40,9 +39,9 @@ def scrape_moneycontrol():
             print(f"🌐 Navigating to: {URL}")
             page.goto(URL, wait_until="domcontentloaded", timeout=60000)
 
-            print("📊 Waiting for cards to appear...")
-            page.wait_for_selector("section.InfoCardsSec_web_mc_container__OwSgE", timeout=40000)
-            time.sleep(3)
+            print("⏳ Waiting for cards to appear...")
+            page.wait_for_selector("div.InfoCardsSec_web_stckCard__X8CAV", timeout=40000)
+            time.sleep(2)  # slight buffer
 
             cards = page.query_selector_all("div.InfoCardsSec_web_stckCard__X8CAV")
             print(f"✅ Found {len(cards)} cards.")
@@ -80,13 +79,13 @@ def scrape_moneycontrol():
                     print(f"⚠️ Error parsing card: {e_card}")
                     continue
 
-            print(f"📝 Prepared {len(rows)} valid rows for Google Sheets.")
+            print(f"📝 Prepared {len(rows)} rows.")
 
-            # Push to Google Sheets
+            # Push to Google Sheet
             google_sheets.update_google_sheet_by_name(SHEET_ID, WORKSHEET_NAME, headers, rows)
-            timestamp = datetime.now().strftime("Last updated: %Y-%m-%d %H:%M:%S")
-            google_sheets.append_footer(SHEET_ID, WORKSHEET_NAME, [timestamp])
-            print("✅ Sheet update complete.")
+            ts = datetime.now().strftime("Last updated: %Y-%m-%d %H:%M:%S")
+            google_sheets.append_footer(SHEET_ID, WORKSHEET_NAME, [ts])
+            print("✅ Sheet updated successfully.")
 
             browser.close()
 
