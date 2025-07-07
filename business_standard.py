@@ -1,4 +1,5 @@
-print("business")
+print("📈 Business Standard Scraper Starting...")
+
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 import google_sheets
@@ -8,11 +9,11 @@ SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
 WORKSHEET_NAME = "bis"
 
 def scrape_business_standard():
-    print("🚀 Starting the scraping process...")
+    print("🚀 Launching browser...")
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)  # You can set True later for GitHub
+            browser = p.chromium.launch(headless=True)
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 viewport={"width": 1280, "height": 800},
@@ -20,7 +21,7 @@ def scrape_business_standard():
             )
             page = context.new_page()
 
-            # Manual stealth patch
+            # Stealth anti-bot bypass
             page.add_init_script("""
             Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
             window.navigator.chrome = { runtime: {} };
@@ -28,39 +29,46 @@ def scrape_business_standard():
             Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
             """)
 
-            page.goto(URL, timeout=60000)
-            print("🌐 Page requested. Waiting fixed time for content...")
-            page.wait_for_timeout(10_000)  # 10 seconds fixed wait
+            print(f"🌐 Navigating to {URL}...")
+            page.goto(URL, timeout=60000, wait_until="networkidle")
 
-            trs = page.query_selector_all("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr")
+            try:
+                page.wait_for_selector("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr", timeout=20000)
+                trs = page.query_selector_all("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr")
+                print(f"✅ Found {len(trs)} rows in the table.")
 
-            if not trs:
-                print("⚠️ No table rows found. Saving screenshot...")
-                page.screenshot(path="final_debug.png")
-                print("📸 Saved final_debug.png. Check it.")
-                browser.close()
-                return
+                if not trs:
+                    print("❌ No rows found.")
+                    return
 
-            headers = ["STOCK", "RECOMMENDATION", "TARGET", "BROKER", "DATE"]
-            rows = []
+                # Extract data
+                headers = ["STOCK", "RECOMMENDATION", "TARGET", "BROKER", "DATE"]
+                rows = []
 
-            for tr in trs[:500]:
-                tds = tr.query_selector_all("td")
-                if len(tds) >= 5:
-                    rows.append([td.inner_text().strip() for td in tds[:5]])
+                for tr in trs[:500]:
+                    tds = tr.query_selector_all("td")
+                    if len(tds) >= 5:
+                        row = [td.inner_text().strip() for td in tds[:5]]
+                        rows.append(row)
 
-            if rows:
-                google_sheets.update_google_sheet_by_name(SHEET_ID, WORKSHEET_NAME, headers, rows)
-                ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                google_sheets.append_footer(SHEET_ID, WORKSHEET_NAME, ["Last updated on:", ts])
-                print(f"✅ Successfully updated {len(rows)} rows.")
-            else:
-                print("⚠️ Table found but no rows extracted.")
+                if rows:
+                    print(f"📤 Updating Google Sheet with {len(rows)} rows...")
+                    google_sheets.update_google_sheet_by_name(SHEET_ID, WORKSHEET_NAME, headers, rows)
+                    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    google_sheets.append_footer(SHEET_ID, WORKSHEET_NAME, ["Last updated on:", ts])
+                    print("✅ Google Sheet update complete.")
+                else:
+                    print("⚠️ Table present but no rows extracted.")
+
+            except Exception as e:
+                print("❌ Table selector failed.")
+                print("📛 Error:", e)
 
             browser.close()
+            print("🧹 Browser closed.")
 
     except Exception as e:
-        print(f"❌ Fatal error: {e}")
+        print(f"❌ Fatal browser error: {e}")
 
 scrape_business_standard()
-print("business")
+print("✅ Script finished.")
