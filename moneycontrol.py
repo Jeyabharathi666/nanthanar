@@ -84,8 +84,3 @@ def scrape_moneycontrol():
 
 scrape_moneycontrol()
 print("✅ Script completed.")
-
-        print(f"❌ Fatal error: {e}")
-
-scrape_moneycontrol()
-print("✅ Script completed.")
