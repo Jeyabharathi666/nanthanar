@@ -39,4 +39,4 @@ google-auth
 google-auth-oauthlib
 flask
 selenium
-
+beautifulsoup4
