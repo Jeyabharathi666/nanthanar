@@ -24,6 +24,9 @@ jobs:
           python -m playwright install --with-deps
           pip install -r requirements.txt
           playwright install chromium
+          
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@latest
 
       - name: 🚀 Run scraping scripts
         run: |
