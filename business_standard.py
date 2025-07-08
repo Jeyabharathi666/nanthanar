@@ -2,6 +2,9 @@
 print("business")
 from datetime import datetime
 from playwright.sync_api import sync_playwright
+from tf_playwright_stealth import stealth_sync
+
+
 import google_sheets
 
 URL = "https://www.business-standard.com/markets/research-report"
@@ -30,11 +33,24 @@ def scrape_business_standard():
             """)
 
             page.goto(URL, timeout=60000)
-            print("🌐 Page requested. Waiting fixed time for content...")
-            page.wait_for_timeout(60_000)  # 10 seconds fixed wait
+            print("🌐 Page requested. Waiting for table to load...")
+
+            try:
+                page.wait_for_selector("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr", timeout=90000)
+            except:
+                print("⚠️ Table selector not found. Saving debug info...")
+                page.screenshot(path="debug_screenshot.png", full_page=True)
+                with open("debug_page.html", "w", encoding="utf-8") as f:
+                    f.write(page.content())
+                page.screenshot(path="debug_screenshot.png", full_page=True)
+                with open("debug_page.html", "w", encoding="utf-8") as f:
+                    f.write(page.content())
+                browser.close()
+                return
 
             trs = page.query_selector_all("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr")
-
+             # After creating the page
+            stealth_sync(page)
             if not trs:
                 print("⚠️ No table rows found. Saving screenshot...")
                 page.screenshot(path="final_debug.png")
