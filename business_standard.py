@@ -2,7 +2,7 @@
 print("business")
 from datetime import datetime
 from playwright.sync_api import sync_playwright
-from tf_playwright_stealth import stealth_sync
+#from tf_playwright_stealth import stealth_sync
 
 
 import google_sheets
@@ -50,7 +50,7 @@ def scrape_business_standard():
 
             trs = page.query_selector_all("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr")
              # After creating the page
-            stealth_sync(page)
+            #stealth_sync(page)
             if not trs:
                 print("⚠️ No table rows found. Saving screenshot...")
                 page.screenshot(path="final_debug.png")
