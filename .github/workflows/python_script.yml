@@ -36,4 +36,4 @@ jobs:
 
       - name: 🚀 Run scraping scripts
         run: |
-          python n.py
+          python business_standard.py
