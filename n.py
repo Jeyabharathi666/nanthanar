@@ -1,64 +1,37 @@
-'''from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from google_sheets import update_google_sheet_by_name, append_footer
+import requests
 from bs4 import BeautifulSoup
-import time
+from datetime import datetime
 
-# Start Selenium WebDriver
-driver = webdriver.Chrome()
-driver.get("https://www.business-standard.com/markets/research-report")
+# 🔗 Target URL
+url = "https://www.business-standard.com/markets/research-report"
+headers = {"User-Agent": "Mozilla/5.0"}
 
-# Wait a few seconds for JS to load data
-time.sleep(5)
+# 🌐 Fetch and parse the page
+response = requests.get(url, headers=headers)
+soup = BeautifulSoup(response.text, "html.parser")
 
-# Parse HTML
-html = BeautifulSoup(driver.page_source, 'html.parser')
+# 🔍 Locate the table
+table = soup.find("table", class_="cmpnydatatable_cmpnydatatable__Cnf6M")
 
-# Find the main table
-table = html.find("table")
-if table:
-    # Get all rows
-    rows = table.find_all("tr")
+# 🧾 Extract headers
+thead = table.find("thead")
+headers = [th.get_text(strip=True) for th in thead.find_all("th")]
 
-    # Loop through each row and print the text from all cells
-    for row in rows:
-        cells = row.find_all(["td", "th"])  # include headers and data
-        data = [cell.get_text(strip=True) for cell in cells]
-        print(" | ".join(data))
-else:
-    print("Table not found.")
+# 📊 Extract rows
+tbody = table.find("tbody")
+rows = []
+for tr in tbody.find_all("tr"):
+    row = [td.get_text(strip=True) for td in tr.find_all("td")]
+    rows.append(row)
 
-driver.quit()
-'''
+# 🧾 Google Sheet configuration
+sheet_id = "YOUR_GOOGLE_SHEET_ID"  # Replace with your actual Sheet ID
+worksheet_name = "Research Reports"
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from bs4 import BeautifulSoup
-import time
+# 📤 Upload to Google Sheets
+update_google_sheet_by_name(sheet_id, worksheet_name, headers, rows)
 
-options = Options()
-options.add_argument("--headless")  # Required for GitHub Actions
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
-
-# Start Selenium WebDriver with options
-driver = webdriver.Chrome(options=options)
-driver.get("https://www.business-standard.com/markets/research-report")
-
-# Wait a few seconds for JS to load data
-time.sleep(5)
-
-# Parse HTML
-html = BeautifulSoup(driver.page_source, 'html.parser')
-
-# Find the main table
-table = html.find("table")
-if table:
-    rows = table.find_all("tr")
-    for row in rows:
-        cells = row.find_all(["td", "th"])
-        data = [cell.get_text(strip=True) for cell in cells]
-        print(" | ".join(data))
-else:
-    print("Table not found.")
-
-driver.quit()
+# 🕒 Append timestamp footer
+timestamp = datetime.now().strftime("Last updated on %Y-%m-%d %H:%M:%S")
+append_footer(sheet_id, worksheet_name, [timestamp])
