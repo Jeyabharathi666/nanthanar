@@ -1,7 +1,7 @@
 print("business")
 from datetime import datetime
 from playwright.sync_api import sync_playwright
-from tf_playwright_stealth import stealth_sync  # Uncomment if using stealth
+#from tf_playwright_stealth import stealth_sync  # Uncomment if using stealth
 import google_sheets
 
 URL = "https://www.business-standard.com/markets/research-report"
@@ -26,7 +26,7 @@ def scrape_business_standard():
             page = context.new_page()
 
             # Apply stealth patch
-            stealth_sync(page)
+            #stealth_sync(page)
 
             page.goto(URL, timeout=60000, wait_until="networkidle")
             print("🌐 Page requested. Waiting for table to load...")
