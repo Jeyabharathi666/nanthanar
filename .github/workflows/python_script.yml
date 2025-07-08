@@ -27,7 +27,12 @@ jobs:
 
           
       - name: Set up Chrome
-        uses: browser-actions/setup-chrome@latest
+        uses: browser-actions/setup-chrome@v1
+        with:
+           chrome-version:'latest'
+           chromedriver-version:'latest'
+           headless:true
+        
 
       - name: 🚀 Run scraping scripts
         run: |
