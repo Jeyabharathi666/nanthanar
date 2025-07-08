@@ -41,6 +41,10 @@ def scrape_business_standard():
                 return
 
             try:
+                page.wait_for_selector("section.section-flex", timeout=3000)
+                page.wait_for_selector("div.flex-70", timeout=3000)
+                page.wait_for_selector("div.section-div corporate-box gl-table no-pad resrchtbl", timeout=3000)
+                page.wait_for_selector("div.tbl-pd", timeout=3000)
                 page.wait_for_selector("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr", timeout=90000)
             except:
                 print("⚠️ Table selector not found. Saving debug info...")
