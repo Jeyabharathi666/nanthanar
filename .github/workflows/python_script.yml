@@ -23,16 +23,7 @@ jobs:
           pip install gspread oauth2client google-auth playwright playwright_stealth beautifulsoup4
           python -m playwright install --with-deps
           pip install -r requirements.txt
-          playwright install chromium
-
-          
-      - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-           chrome-version:'latest'
-           chromedriver-version:'latest'
-           headless:true
-        
+          playwright install chromium        
 
       - name: 🚀 Run scraping scripts
         run: |
