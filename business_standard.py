@@ -1,10 +1,7 @@
-
 print("business")
 from datetime import datetime
 from playwright.sync_api import sync_playwright
-#from tf_playwright_stealth import stealth_sync
-
-
+from tf_playwright_stealth import stealth_sync  # Uncomment if using stealth
 import google_sheets
 
 URL = "https://www.business-standard.com/markets/research-report"
@@ -16,24 +13,32 @@ def scrape_business_standard():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)  # You can set True later for GitHub
+            browser = p.chromium.launch(headless=True)
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 viewport={"width": 1280, "height": 800},
-                locale="en-US"
+                locale="en-US",
+                extra_http_headers={
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                    "Referer": "https://www.google.com/"
+                }
             )
             page = context.new_page()
 
-            # Manual stealth patch
-            page.add_init_script("""
-            Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-            window.navigator.chrome = { runtime: {} };
-            Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] });
-            Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
-            """)
+            # Apply stealth patch
+            stealth_sync(page)
 
-            page.goto(URL, timeout=60000)
+            page.goto(URL, timeout=60000, wait_until="networkidle")
             print("🌐 Page requested. Waiting for table to load...")
+
+            # Check for access denial or CAPTCHA
+            if "Access Denied" in page.title() or "captcha" in page.url:
+                print("🚫 Access blocked or CAPTCHA detected.")
+                page.screenshot(path="access_denied.png", full_page=True)
+                with open("access_denied.html", "w", encoding="utf-8") as f:
+                    f.write(page.content())
+                browser.close()
+                return
 
             try:
                 page.wait_for_selector("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr", timeout=90000)
@@ -42,19 +47,13 @@ def scrape_business_standard():
                 page.screenshot(path="debug_screenshot.png", full_page=True)
                 with open("debug_page.html", "w", encoding="utf-8") as f:
                     f.write(page.content())
-                page.screenshot(path="debug_screenshot.png", full_page=True)
-                with open("debug_page.html", "w", encoding="utf-8") as f:
-                    f.write(page.content())
                 browser.close()
                 return
 
             trs = page.query_selector_all("table.cmpnydatatable_cmpnydatatable__Cnf6M tbody tr")
-             # After creating the page
-            #stealth_sync(page)
             if not trs:
                 print("⚠️ No table rows found. Saving screenshot...")
                 page.screenshot(path="final_debug.png")
-                print("📸 Saved final_debug.png. Check it.")
                 browser.close()
                 return
 
