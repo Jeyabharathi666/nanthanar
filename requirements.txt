@@ -40,3 +40,5 @@ google-auth-oauthlib
 flask
 selenium
 beautifulsoup4
+pandas-market-calendars
+nselib
