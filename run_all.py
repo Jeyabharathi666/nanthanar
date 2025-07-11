@@ -11,11 +11,8 @@ def home():
 def run_all_scripts():
     scripts = [
         'trendlyne1.py',
-        'economic_times.py',
-        #'business_standard.py',
-        #'moneycontrol.py',
-        #'monaca.py',
-        #'nse.py'
+        'economic_times.py'
+        
     ]
 
     delay_between_scripts = 15  # seconds
