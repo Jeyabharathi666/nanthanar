@@ -74,7 +74,7 @@ def scrape_trend():
             page.goto(URL, timeout=60000)
             page.wait_for_load_state("networkidle")
             page.wait_for_timeout(5000)
-            page.wait_for_selector("table.cmpnydatatable_cmpnydatatable__Cnf6M", timeout=30000)
+            page.wait_for_selector("table", timeout=30000)
 
             for i in range(5):
                 try:
