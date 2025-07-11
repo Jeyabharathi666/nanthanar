@@ -67,6 +67,7 @@ client = gspread.authorize(creds)
 sheet = client.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
 
 # 📥 Company names from column B (no header)
+'''
 company_names = sheet.col_values(2)
 
 # 📊 Load NSE equity list
@@ -86,3 +87,4 @@ for i, name in enumerate(company_names, start=1):
 
 print("\n✅ All NSE codes updated in column C.")
 
+'''
