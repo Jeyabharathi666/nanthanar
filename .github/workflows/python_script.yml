@@ -1,10 +1,12 @@
-name: Run Scrapers Every 5 Minutes
+name: Run Scrapers Every Hour
 
 on:
   schedule:
-    - cron: '0 */2 * * *'  # every 2 hours at minute 0
- 
+    - cron: '0 * * * *'  # ⏰ every hour at minute 0
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   run-scrapers:
@@ -16,21 +18,16 @@ jobs:
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v3
-      - name: 📤 Upload debug artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-artifacts
-          path: |
-            debug_screenshot.png
-            debug_page.html
-            
+
+      - name: 🧪 List files (debug)
+        run: ls -R
+
       - name: 📦 Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install tf-playwright-stealth
           python -m playwright install --with-deps
-       
 
       - name: 🚀 Run scraping scripts
         run: |
