@@ -15,7 +15,7 @@ def run_all_scripts():
         #'business_standard.py',
         #'moneycontrol.py',
         #'monaca.py',
-        'nse.py'
+        #'nse.py'
     ]
 
     delay_between_scripts = 15  # seconds
