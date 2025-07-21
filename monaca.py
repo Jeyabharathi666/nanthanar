@@ -106,7 +106,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 # === WRITE GOOGLE SERVICE ACCOUNT JSON FROM GITHUB SECRET ===
-SERVICE_ACCOUNT_FILE = "service_account.json"
+SERVICE_ACCOUNT_FILE = "pags-429207-b6b0c60cd0ce.json"
 with open(SERVICE_ACCOUNT_FILE, "w") as f:
     f.write(os.environ["NEW"])  # Secret name in GitHub
 
