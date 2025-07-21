@@ -16,11 +16,11 @@ jobs:
       NEW: ${{ secrets.NEW }}
 
     steps:
-      # - name: 📥 Checkout code
-      #   uses: actions/checkout@v3
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
 
-      # - name: 🧪 List files (debug)
-      #   run: ls -R
+      - name: 🧪 List files (debug)
+        run: ls -R
 
       # - name: 📦 Install dependencies
       #   run: |
