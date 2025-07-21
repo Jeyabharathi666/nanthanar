@@ -100,27 +100,24 @@ if __name__ == "__main__":
 print("analysts")
 '''
 
-import os
 import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
-# === WRITE GOOGLE SERVICE ACCOUNT JSON FROM GITHUB SECRET ===
-SERVICE_ACCOUNT_FILE = "pags-429207-b6b0c60cd0ce.json"
-with open(SERVICE_ACCOUNT_FILE, "w") as f:
-    f.write(os.environ["NEW"])  # Secret name in GitHub
-
-# === GOOGLE SHEETS CONFIG ===
+# === CONFIG ===
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
 WORKSHEET_NAME = "monac"
+SERVICE_ACCOUNT_FILE = "pags-429207-b6b0c60cd0ce.json"
 
+# === SETUP GOOGLE SHEETS ===
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_ACCOUNT_FILE, scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
 
-# === FETCH DATA FROM MONEYCONTROL API ===
-url = "https://api.moneycontrol.com/mcapi/v1/broker-research/get-analysts-choice?start=0&limit=400&sortBy=broker_count&deviceType=W"
+# === FETCH ANALYST CHOICE DATA ===
+url = "https://api.moneycontrol.com/mcapi/v1/broker-research/get-analysts-choice?start=0&limit=500&sortBy=broker_count&deviceType=W"
 headers = {
     "User-Agent": "Mozilla/5.0",
     "Referer": "https://www.moneycontrol.com/"
@@ -131,7 +128,7 @@ stock_ideas = data.get("data", [])
 
 print(f"✅ Fetched {len(stock_ideas)} stock ideas.\n")
 
-# === PREPARE DATA FOR SHEET ===
+# === PREPARE DATA FOR GSheet ===
 rows = [["Stock", "Analysts", "Buys", "Holds", "CMP", "Low (₹ / %)", "Avg (₹ / %)", "High (₹ / %)"]]
 
 for idea in stock_ideas:
@@ -142,21 +139,22 @@ for idea in stock_ideas:
         holds = idea.get("hold_count", "N/A")
         cmp = idea.get("cmp", "N/A")
 
-        # Get Target Prices
+        # Extract targets
         low_val = avg_val = high_val = "N/A"
         low_pct = avg_pct = high_pct = "N/A"
 
         for target in idea.get("targets", []):
             if target["id"] == "min_target_price":
                 low_val = target.get("value", "N/A")
-                low_pct = target.get("percentages", "N/A")
+                low_pct = target.get("percentages", "N/A") or "N/A"
             elif target["id"] == "avg_target_price":
                 avg_val = target.get("value", "N/A")
-                avg_pct = target.get("percentages", "N/A")
+                avg_pct = target.get("percentages", "N/A") or "N/A"
             elif target["id"] == "max_target_price":
                 high_val = target.get("value", "N/A")
-                high_pct = target.get("percentages", "N/A")
+                high_pct = target.get("percentages", "N/A") or "N/A"
 
+        # Format values
         low = f"{low_val} / {low_pct}%" if low_val != "N/A" else "N/A"
         avg = f"{avg_val} / {avg_pct}%" if avg_val != "N/A" else "N/A"
         high = f"{high_val} / {high_pct}%" if high_val != "N/A" else "N/A"
@@ -166,8 +164,11 @@ for idea in stock_ideas:
         print(f"⚠️ Error parsing stock idea: {e}")
         continue
 
-# === PUSH TO GOOGLE SHEET ===
+# === APPEND TIMESTAMP AT BOTTOM ===
+timestamp = datetime.now().strftime("Updated on %d-%m-%Y at %I:%M %p")
+rows.append([""] * 7 + [timestamp])  # put timestamp in last column
+
+# === WRITE TO SHEET ===
 sheet.clear()
 sheet.update(values=rows, range_name="A1")
-
-print(f"📤 Uploaded {len(rows) - 1} stock ideas to Google Sheet '{WORKSHEET_NAME}'.")
+print(f"📤 Uploaded {len(rows)-2} stock ideas to Google Sheet '{WORKSHEET_NAME}'. ✅ Timestamp: {timestamp}")
