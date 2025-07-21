@@ -138,7 +138,7 @@ headers = {"User-Agent": "Mozilla/5.0"}
 # Clean and convert string to float
 def clean_float(value):
     try:
-        clean = re.sub(r'[^\d.]', '', value)
+        clean = re.sub(r'[^\d.]', '', value.replace(',', ''))
         return float(clean) if clean else "NA"
     except:
         return "NA"
@@ -158,16 +158,24 @@ def fetch_screener_data(nse_code):
 
         def get_clean_price():
             try:
-                text = soup.select_one("div[class='company-info__price'] span.number").text.strip()
-                return clean_float(text)
-            except:
+                for li in soup.select("#top-ratios li.flex.flex-space-between"):
+                    label = li.select_one("span.name")
+                    value = li.select_one("span.value")
+                    if label and "Current Price" in label.text:
+                        return clean_float(value.text)
+                return "NA"
+            except Exception as e:
+                print(f"⚠️ Error extracting current price: {e}")
                 return "NA"
 
         def get_label_value(label):
             try:
-                item = soup.select_one(f"li:-soup-contains('{label}')")
-                raw = item.select_one("span.number").text.strip() if item else ""
-                return clean_float(raw)
+                for li in soup.select("#top-ratios li.flex.flex-space-between"):
+                    lbl = li.select_one("span.name")
+                    val = li.select_one("span.value")
+                    if lbl and label in lbl.text:
+                        return clean_float(val.text)
+                return "NA"
             except:
                 return "NA"
 
