@@ -87,23 +87,27 @@ def scrape_moneycontrol():
 
 scrape_moneycontrol()
 '''
-
+import os
 import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-# === CONFIG ===
+# === IF USING GITHUB SECRET ===
+SERVICE_ACCOUNT_FILE = "pags-429207-b6b0c60cd0ce.json"
+with open(SERVICE_ACCOUNT_FILE, "w") as f:
+    f.write(os.environ["NEW"])  # Use secret 'NEW' from GitHub Actions
+
+# === GOOGLE SHEET CONFIG ===
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
 WORKSHEET_NAME = "monac"
-SERVICE_ACCOUNT_FILE = "pags-429207-b6b0c60cd0ce.json"
 
-# === SETUP GOOGLE SHEETS ===
+# === SETUP GSPREAD ===
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_ACCOUNT_FILE, scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
 
-# === FETCH STOCK IDEAS ===
+# === FETCH FROM MONEYCONTROL STOCK IDEAS API ===
 url = "https://api.moneycontrol.com/mcapi/v1/broker-research/stock-ideas?start=0&limit=1000&deviceType=W"
 headers = {
     "User-Agent": "Mozilla/5.0",
@@ -115,8 +119,9 @@ stock_ideas = data.get("data", [])
 
 print(f"✅ Fetched {len(stock_ideas)} stock ideas.\n")
 
-# === PREPARE DATA FOR GSheet ===
-rows = [["Name", "CMP", "Target", "Upside (%)", "Organization", "Rating"]]  # header
+# === PREPARE DATA FOR SHEET ===
+rows = [["Date", "Stock", "CMP", "Target Price", "Upside (%)", "Recommendation", "Organization", "Recommended Price", "Report PDF"]]
+
 for idea in stock_ideas:
     row = [
         idea.get("recommend_date", "N/A"),
@@ -124,18 +129,14 @@ for idea in stock_ideas:
         idea.get("cmp", "N/A"),
         idea.get("target_price", "N/A"),
         idea.get("potential_returns_per", "N/A"),
-        idea.get("organization", "N/A"),
         idea.get("recommend_flag", "N/A"),
-        idea.get("potential_returns_per", " "),
-        idea.get("recommend_price", "N/A")
-        
-        
+        idea.get("organization", "N/A"),
+        idea.get("recommended_price", "N/A"),
+        idea.get("attachment", "N/A")
     ]
     rows.append(row)
 
-# === WRITE TO SHEET ===
+# === PUSH TO SHEET ===
 sheet.clear()
-sheet.update("A1", rows)
-print(f"📤 Uploaded {len(stock_ideas)} stock ideas to Google Sheet '{WORKSHEET_NAME}'.")
-
-
+sheet.update(values=rows, range_name="A1")
+print(f"📤 Uploaded {len(rows) - 1} stock ideas to Google Sheet '{WORKSHEET_NAME}'.")
