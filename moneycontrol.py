@@ -1,4 +1,4 @@
-from playwright.sync_api import sync_playwright
+'''from playwright.sync_api import sync_playwright
 import google_sheets
 from datetime import datetime
 import time
@@ -86,5 +86,56 @@ def scrape_moneycontrol():
         print(f"❌ Error occurred: {e}")
 
 scrape_moneycontrol()
+'''
+
+import requests
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+# === CONFIG ===
+SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
+WORKSHEET_NAME = "monac"
+SERVICE_ACCOUNT_FILE = "pags-429207-b6b0c60cd0ce.json"
+
+# === SETUP GOOGLE SHEETS ===
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_ACCOUNT_FILE, scope)
+client = gspread.authorize(creds)
+sheet = client.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
+
+# === FETCH STOCK IDEAS ===
+url = "https://api.moneycontrol.com/mcapi/v1/broker-research/stock-ideas?start=0&limit=1000&deviceType=W"
+headers = {
+    "User-Agent": "Mozilla/5.0",
+    "Referer": "https://www.moneycontrol.com/"
+}
+resp = requests.get(url, headers=headers)
+data = resp.json()
+stock_ideas = data.get("data", [])
+
+print(f"✅ Fetched {len(stock_ideas)} stock ideas.\n")
+
+# === PREPARE DATA FOR GSheet ===
+rows = [["Name", "CMP", "Target", "Upside (%)", "Organization", "Rating"]]  # header
+for idea in stock_ideas:
+    row = [
+        idea.get("recommend_date", "N/A"),
+        idea.get("stkname", "N/A"),
+        idea.get("cmp", "N/A"),
+        idea.get("target_price", "N/A"),
+        idea.get("potential_returns_per", "N/A"),
+        idea.get("organization", "N/A"),
+        idea.get("recommend_flag", "N/A"),
+        idea.get("potential_returns_per", " "),
+        idea.get("recommend_price", "N/A")
+        
+        
+    ]
+    rows.append(row)
+
+# === WRITE TO SHEET ===
+sheet.clear()
+sheet.update("A1", rows)
+print(f"📤 Uploaded {len(stock_ideas)} stock ideas to Google Sheet '{WORKSHEET_NAME}'.")
 
 
