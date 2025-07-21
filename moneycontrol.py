@@ -91,6 +91,7 @@ import os
 import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
 # === IF USING GITHUB SECRET ===
 SERVICE_ACCOUNT_FILE = "pags-429207-b6b0c60cd0ce.json"
@@ -140,3 +141,9 @@ for idea in stock_ideas:
 sheet.clear()
 sheet.update(values=rows, range_name="A1")
 print(f"📤 Uploaded {len(rows) - 1} stock ideas to Google Sheet '{WORKSHEET_NAME}'.")
+
+# === APPEND TIMESTAMP ===
+timestamp = datetime.now().strftime("Last updated on %d-%m-%Y at %H:%M:%S")
+sheet.update_acell(f"A{len(rows) + 2}", timestamp)
+print(f"🕒 Timestamp appended: {timestamp}")
+
