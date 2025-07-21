@@ -99,7 +99,7 @@ with open(SERVICE_ACCOUNT_FILE, "w") as f:
 
 # === GOOGLE SHEET CONFIG ===
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
-WORKSHEET_NAME = "monac"
+WORKSHEET_NAME = "mons"
 
 # === SETUP GSPREAD ===
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
