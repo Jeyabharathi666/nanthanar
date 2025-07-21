@@ -1,4 +1,4 @@
-print("business")
+'''print("business")
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 #from tf_playwright_stealth import stealth_sync  # Uncomment if using stealth
@@ -84,3 +84,58 @@ def scrape_business_standard():
 
 scrape_business_standard()
 print("business")
+'''
+
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
+import google_sheets
+
+# --- CONFIG ---
+SCRAPERAPI_KEY = "97dfa0dfcf1d3829f1bd660501441c36"
+URL = "https://www.business-standard.com/markets/research-report"
+PROXY_URL = f"http://api.scraperapi.com/?api_key={SCRAPERAPI_KEY}&url={URL}"
+
+SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
+WORKSHEET_NAME = "bis"
+
+def scrape_with_scraperapi_requests():
+    print("🚀 Starting scraping with requests + ScraperAPI...")
+
+    try:
+        response = requests.get(PROXY_URL, timeout=60)
+        if response.status_code != 200:
+            print(f"❌ Failed to fetch page: {response.status_code}")
+            return
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        table = soup.select_one("table.cmpnydatatable_cmpnydatatable__Cnf6M")
+        if not table:
+            print("⚠️ Research report table not found.")
+            with open("debug.html", "w", encoding="utf-8") as f:
+                f.write(response.text)
+            return
+
+        headers = ["STOCK", "RECOMMENDATION", "TARGET", "BROKER", "DATE"]
+        rows = []
+
+        for tr in table.select("tbody tr"):
+            tds = tr.find_all("td")
+            if len(tds) >= 5:
+                row = [td.get_text(strip=True) for td in tds[:5]]
+                rows.append(row)
+
+        if rows:
+            google_sheets.update_google_sheet_by_name(SHEET_ID, WORKSHEET_NAME, headers, rows)
+            ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            google_sheets.append_footer(SHEET_ID, WORKSHEET_NAME, ["Last updated on:", ts])
+            print(f"✅ Uploaded {len(rows)} rows to Google Sheet.")
+        else:
+            print("⚠️ Table found but no rows extracted.")
+
+    except Exception as e:
+        print(f"❌ Error occurred: {e}")
+
+scrape_with_scraperapi_requests()
+
