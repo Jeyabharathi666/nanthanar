@@ -6,7 +6,8 @@ scripts = [
     'trendlyne1.py',
     'economic_times.py',
     'sheshaview.py',
-    'business_standard.py'
+    'business_standard.py',
+    'moneycontrol.py'
 ]
 
 # Delay between launching each script (in seconds)
