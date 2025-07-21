@@ -7,7 +7,8 @@ scripts = [
     'economic_times.py',
     'sheshaview.py',
     'business_standard.py',
-    'moneycontrol.py'
+    'moneycontrol.py',
+    'monaca.py'
 ]
 
 # Delay between launching each script (in seconds)
