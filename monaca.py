@@ -120,7 +120,7 @@ client = gspread.authorize(creds)
 sheet = client.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
 
 # === FETCH DATA FROM MONEYCONTROL API ===
-url = "https://api.moneycontrol.com/mcapi/v1/broker-research/get-analysts-choice?start=0&limit=250&sortBy=broker_count&deviceType=W"
+url = "https://api.moneycontrol.com/mcapi/v1/broker-research/get-analysts-choice?start=0&limit=550&sortBy=broker_count&deviceType=W"
 headers = {
     "User-Agent": "Mozilla/5.0",
     "Referer": "https://www.moneycontrol.com/"
