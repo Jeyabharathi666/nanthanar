@@ -1,4 +1,4 @@
-'''import gspread
+import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import requests
 from bs4 import BeautifulSoup
@@ -233,3 +233,4 @@ def process_sheet():
 # 🔁 Run it
 if __name__ == "__main__":
     process_sheet()
+'''
