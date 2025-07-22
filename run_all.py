@@ -5,7 +5,7 @@ import time
 scripts = [
    # 'trendlyne1.py',
     #'economic_times.py',
-    'sheshaview.py',
+    #'sheshaview.py',
     #'business_standard.py',
     #'moneycontrol.py',
     'monaca.py',
