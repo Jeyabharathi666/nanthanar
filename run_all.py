@@ -27,5 +27,5 @@ for script in scripts:
 # Wait for all to finish
 for process in processes:
     process.wait()
-
+S
 print("✅ All scripts have finished running.")
