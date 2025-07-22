@@ -13,8 +13,8 @@ with open(SERVICE_ACCOUNT_FILE, 'w') as f:
 
 # Google Sheets config
 SHEET_ID = '1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA'
-SOURCE_SHEET = 'new'
-TARGET_SHEET = 'sanjview'
+SOURCE_SHEET = '22/7'
+TARGET_SHEET = '22/7'
 
 # Setup credentials
 scope = [
@@ -103,7 +103,7 @@ def process_sanjayview():
 
     # Write headers
     headers = ["NSE Code", "Company Name", "Current Price", "Market Cap", "IndPE", "Book Value", "Dividend Yield", "ROCE", "ROE", "Face Value"]
-    target_ws.update('A1:K1', [headers])
+    target_ws.update('AM1:BA1', [headers])
 
     # Fetch and write data
     for i, code in enumerate(nse_codes):
@@ -111,7 +111,7 @@ def process_sanjayview():
             continue
         print(f"🔍 Fetching data for {code} (Row {i+2})")
         row_data = [code] + fetch_screener_data(code)
-        target_ws.update(f'A{i+2}:K{i+2}', [row_data])
+        target_ws.update(f'AM{i+2}:BA{i+2}', [row_data])
         time.sleep(1.5)
 
     print("\n✅ Data written to 'sanjayview' sheet.")
