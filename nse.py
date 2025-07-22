@@ -1,11 +1,27 @@
+import os
 import re
+import time
 import pandas as pd
 import gspread
-import time
 from gspread.exceptions import APIError
 from oauth2client.service_account import ServiceAccountCredentials
 from nselib import capital_market
 from difflib import get_close_matches
+
+# 🔐 Write service account JSON from GitHub secret
+with open("creds.json", "w") as f:
+    f.write(os.environ["NEW"])
+
+# 📄 Google Sheets setup
+SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
+WORKSHEET_NAME = "22/7"
+CREDENTIALS_FILE = "creds.json"
+
+scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
+creds = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, scope)
+client = gspread.authorize(creds)
+sheet = client.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
 
 # 🧹 Normalize input
 def normalize_input(name):
@@ -46,17 +62,6 @@ def get_nse_code(user_input, df):
     except Exception as e:
         return f"Error: {e}"
 
-# 📄 Google Sheets setup
-SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
-WORKSHEET_NAME = "22/7"
-CREDENTIALS_FILE = "pags-429207-b11860985f46.json"
-
-scope = ['https://spreadsheets.google.com/feeds',
-         'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, scope)
-client = gspread.authorize(creds)
-sheet = client.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
-
 # 📥 Company names from column A (no header)
 company_names = sheet.col_values(1)
 
@@ -73,24 +78,22 @@ equity_df['NAME OF COMPANY'] = equity_df['NAME OF COMPANY'].str.replace(r'[^A-Z0
 for i, name in enumerate(company_names, start=1):
     try:
         nse_code = get_nse_code(name, equity_df)
-        print(f"[Row {i}] {name} → {nse_code}")
 
         try:
             sheet.update_acell(f"B{i}", nse_code)
         except APIError as e:
             if "Quota exceeded" in str(e) or "429" in str(e):
-                print("⚠️ Quota exceeded! Waiting 100 seconds...")
+                print(f"⚠️ Quota exceeded at Row {i}! Waiting 100 seconds...")
                 time.sleep(100)
                 try:
                     sheet.update_acell(f"B{i}", nse_code)
-                    print(f"✅ Retried [Row {i}] after wait → {nse_code}")
                 except APIError as e2:
-                    print(f"❌ Still failed on [Row {i}] after wait: {e2}")
+                    print(f"❌ Still failed at Row {i} after retry: {e2}")
             else:
-                print(f"❌ Other API error at row {i}: {e}")
+                print(f"❌ API error at Row {i}: {e}")
 
     except Exception as ex:
-        print(f"❌ Error processing row {i}: {ex}")
+        print(f"❌ Error processing Row {i}: {ex}")
 
 # 📝 Update NSE_LIST sheet
 try:
