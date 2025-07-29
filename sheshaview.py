@@ -140,4 +140,4 @@ def fetch_promoter_holding(nse_code):
         print("❌ Could not extract promoter holding.")
 
 # Run for TCS
-fetch_promoter_holding("TCS")
+fetch_promoter_holding("INFY")
