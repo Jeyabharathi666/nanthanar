@@ -8,8 +8,8 @@ scripts = [
     'sheshaview.py',
     #'business_standard.py',
     #'moneycontrol.py',
-    'monaca.py',
-   'nse.py'
+    #'monaca.py',
+   #'nse.py'
 ]
 
 # Delay between launching each script (in seconds)
