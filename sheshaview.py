@@ -290,7 +290,7 @@ def fetch_screener_data(nse_code):
             return "NA"
 
         return [
-            get_label_value("Market Cap"),
+            #get_label_value("Market Cap"),
             get_label_value("P/E"),
             get_label_value("Book Value"),
             get_label_value("Dividend Yield"),
