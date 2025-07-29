@@ -1,5 +1,4 @@
 
-'''
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import requests
@@ -100,44 +99,3 @@ def process_sheet():
 # 🔁 Run
 if __name__ == "__main__":
     process_sheet()
-'''
-from playwright.sync_api import sync_playwright
-from bs4 import BeautifulSoup
-
-def fetch_promoter_holding(nse_code):
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        url = f"https://www.screener.in/company/{nse_code}/"
-        page.goto(url, timeout=60000)
-        page.wait_for_timeout(5000)
-        html = page.content()
-        browser.close()
-
-    soup = BeautifulSoup(html, "html.parser")
-    result = {}
-
-    # 🧠 Try to extract shareholding section
-    section = soup.find("section", string=lambda text: text and "Promoter Holding" in text)
-    if not section:
-        section = soup.find("section", {"id": "shareholding"})
-
-    if section:
-        for row in section.find_all("tr"):
-            try:
-                label = row.find_all("td")[0].text.strip()
-                value = row.find_all("td")[1].text.strip()
-                result[label] = value
-            except:
-                continue
-
-    print(f"\n🔍 Shareholding for {nse_code}")
-    print("-" * 40)
-    if result:
-        for k, v in result.items():
-            print(f"{k:<30}: {v}")
-    else:
-        print("❌ Could not extract promoter holding.")
-
-# Run for TCS
-fetch_promoter_holding("INFY")
