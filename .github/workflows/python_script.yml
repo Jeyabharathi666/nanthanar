@@ -31,7 +31,7 @@ jobs:
 
       - name: 🚀 Run scraping scripts
         run: |
-          python monac.py
+          python monaca.py
 
       - name: 🚀 Run scraping scripts
         run: |
@@ -39,4 +39,4 @@ jobs:
 
       - name: 🚀 Run scraping scripts
         run: |
-          python shes.py
+          python shesaview.py
