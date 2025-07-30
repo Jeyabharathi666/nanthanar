@@ -3,13 +3,9 @@ import time
 
 # Your actual script filenames
 scripts = [
-   # 'trendlyne1.py',
-    #'economic_times.py',
-    'sheshaview.py',
-    #'business_standard.py',
-    #'moneycontrol.py',
     'monaca.py',
-   'nse.py'
+   'nse.py',
+   'sheshaview.py'
 ]
 
 # Delay between launching each script (in seconds)
