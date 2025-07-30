@@ -14,7 +14,7 @@ import json
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
 SHEET_NAME = "22/7"
 COLUMN_READ = 2         # B column
-COLUMN_WRITE_START = 39 # Column AM
+COLUMN_WRITE_START = 12 # Column AM
 headers = {"User-Agent": "Mozilla/5.0"}
 
 # === LOAD CREDS FROM GITHUB SECRET ===
