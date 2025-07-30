@@ -40,7 +40,7 @@ def clean_float(value):
 
 # === FETCH SCREENER DATA ===
 def fetch_screener_data(nse_code):
-    url = f"https://www.screener.in/company/{nse_code}/"
+    url = f"https://www.screener.in/company/{nse_code}/consolidated/"
     try:
         res = requests.get(url, headers=headers, timeout=10)
         soup = BeautifulSoup(res.text, 'html.parser')
