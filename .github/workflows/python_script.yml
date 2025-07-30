@@ -39,4 +39,4 @@ jobs:
 
       - name: 🚀 Run scraping scripts
         run: |
-          python shesaview.py
+          python sheshaview.py
