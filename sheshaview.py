@@ -39,7 +39,7 @@ def clean_float(value):
         return "NA"
 
 # === FETCH SCREENER DATA ===
-def fetch_screener_data(nse_code):
+'''def fetch_screener_data(nse_code):
     url = f"https://www.screener.in/company/{nse_code}/consolidated/"
     try:
         res = requests.get(url, headers=headers, timeout=10)
@@ -65,6 +65,60 @@ def fetch_screener_data(nse_code):
     except Exception as e:
         print(f"❌ Error fetching data for {nse_code}: {e}")
         return ["Error"] * 7
+'''
+# === FETCH SCREENER DATA ===
+def fetch_screener_data(nse_code):
+    url = f"https://www.screener.in/company/{nse_code}/consolidated/"
+    try:
+        res = requests.get(url, headers=headers, timeout=15)
+        soup = BeautifulSoup(res.text, 'html.parser')
+
+        def get_label_value(label):
+            for li in soup.select("#top-ratios li.flex.flex-space-between"):
+                lbl = li.select_one("span.name")
+                val = li.select_one("span.value")
+                if lbl and label in lbl.text:
+                    return clean_float(val.text)
+            return "NA"
+
+        return [
+            get_label_value("P/E"),
+            get_label_value("Book Value"),
+            get_label_value("Dividend Yield"),
+            get_label_value("ROCE"),
+            get_label_value("ROE"),
+            get_label_value("Face Value"),
+        ]
+    except Exception as e:
+        print(f"❌ Error fetching consolidated data for {nse_code}: {e}")
+        return ["Error"] * 6
+
+# === FALLBACK FETCH (non-consolidated) ===
+def fetch_screener_data_fallback(nse_code):
+    url = f"https://www.screener.in/company/{nse_code}/"
+    try:
+        res = requests.get(url, headers=headers, timeout=15)
+        soup = BeautifulSoup(res.text, 'html.parser')
+
+        def get_label_value(label):
+            for li in soup.select("#top-ratios li.flex.flex-space-between"):
+                lbl = li.select_one("span.name")
+                val = li.select_one("span.value")
+                if lbl and label in lbl.text:
+                    return clean_float(val.text)
+            return "NA"
+
+        return [
+            get_label_value("P/E"),
+            get_label_value("Book Value"),
+            get_label_value("Dividend Yield"),
+            get_label_value("ROCE"),
+            get_label_value("ROE"),
+            get_label_value("Face Value"),
+        ]
+    except Exception as e:
+        print(f"❌ Error fetching fallback data for {nse_code}: {e}")
+        return ["Error"] * 6
 
 # === MAIN PROCESS ===
 def process_sheet():
@@ -76,7 +130,13 @@ def process_sheet():
             continue
 
         print(f"🔍 Row {i}: Fetching data for {code}")
+        #row_data = fetch_screener_data(code)
         row_data = fetch_screener_data(code)
+        if "NA" in row_data:
+            print(f"↩️ Found 'NA' in consolidated data. Trying fallback for {code}")
+            fallback_data = fetch_screener_data_fallback(code)
+            row_data = fallback_data
+
 
         try:
             cell_range = f"{gspread.utils.rowcol_to_a1(i, COLUMN_WRITE_START)}:{gspread.utils.rowcol_to_a1(i, COLUMN_WRITE_START + len(row_data) - 1)}"
