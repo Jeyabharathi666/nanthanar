@@ -5,18 +5,19 @@ import time
 import gspread
 
 # ====== CONFIG ======
-COOKIE_FILE = "www.screener.in_json_1754986342462.json"
+COOKIE_FILE = "screener.json"
 BASE_URL = "https://www.screener.in/company/"
 SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
 WORKSHEET_NAME = "indpe"
 
 xpaths = {
-    "Industry PE": "/html/body/main/div[3]/div[3]/div[2]/ul/li[16]/span[2]/span",
+    "Industry PE": "/html/body/main/div[3]/div[3]/div[2]/ul/li[12]/span[2]/span",
     "FII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[17]/span[2]/span",
-    "DII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[18]/span[2]/span",
-    "Debt to equity": "/html/body/main/div[3]/div[3]/div[2]/ul/li[15]/span[2]/span"
+    "DII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[16]/span[2]/span",
+    "Debt to equity": "/html/body/main/div[3]/div[3]/div[2]/ul/li[6]/span[2]/span"
 }
 
+# ====== HELPERS ======
 def update_with_retry(worksheet, cell_range, values, max_retries=5):
     retries = 0
     while retries < max_retries:
@@ -32,6 +33,18 @@ def update_with_retry(worksheet, cell_range, values, max_retries=5):
                 raise
     raise Exception("Max retries exceeded for Google Sheets update due to quota limits.")
 
+def get_text_with_wait(page, xpath, retries=10, delay=1):
+    """Try to extract text from an element, waiting until it loads."""
+    for _ in range(retries):
+        el = page.locator(f"xpath={xpath}")
+        if el.count() > 0:
+            text = el.inner_text().strip()
+            if text:  # not empty
+                return text
+        time.sleep(delay)
+    return "NA"
+
+# ====== MAIN ======
 # Load cookies
 with open(COOKIE_FILE, "r", encoding="utf-8") as f:
     cookies = json.load(f)
@@ -50,7 +63,7 @@ rows = worksheet.get_all_values()
 
 # Launch browser and reuse context/page for all NSE codes
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
+    browser = p.chromium.launch(headless=True)  # set False for debugging
     context = browser.new_context()
     context.add_cookies(cookies)
     page = context.new_page()
@@ -64,14 +77,15 @@ with sync_playwright() as p:
 
         try:
             page.goto(f"{BASE_URL}{nse_code}/", timeout=30000)
+
             scraped_data = []
             for name, xpath in xpaths.items():
                 try:
-                    el = page.locator(f"xpath={xpath}")
-                    value = el.inner_text().strip() if el.count() > 0 else "NA"
-                except:
+                    value = get_text_with_wait(page, xpath, retries=10, delay=1)
+                except Exception:
                     value = "NA"
                 scraped_data.append(value)
+                print(f"  {name}: {value}")
 
             update_with_retry(worksheet, f"B{i}:E{i}", [scraped_data])
             print(f"✅ Row {i} updated: {scraped_data}")
