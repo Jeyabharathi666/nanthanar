@@ -1,4 +1,4 @@
-'''from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright
 import json
 from google_sheets import get_google_credentials, authorize_google_sheets
 import time
@@ -195,3 +195,4 @@ with sync_playwright() as p:
             print(f"❌ Row {i} failed: {e}")
 
     browser.close()
+'''
