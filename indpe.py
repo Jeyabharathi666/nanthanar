@@ -88,7 +88,7 @@ with sync_playwright() as p:
                 scraped_data.append(value)
                 print(f"  {name}: {value}")
 
-            update_with_retry(worksheet, f"B{i}:E{i}", [scraped_data])
+            update_with_retry(worksheet, f"B{i}:F{i}", [scraped_data])
             print(f"✅ Row {i} updated: {scraped_data}")
 
         except Exception as e:
