@@ -1,8 +1,8 @@
-name: Run Scrapers Every Hour
+name: Run AAA Bonds Scraper Every 5 Hours
 
 on:
   schedule:
-    - cron: '0 */5 * * *'  # ⏰ every five hour at minute 0
+    - cron: '0 */5 * * *'  # every 5 hours at minute 0
   workflow_dispatch:
 
 permissions:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   run-scrapers:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # fixed to Ubuntu 22.04
 
     env:
       NEW: ${{ secrets.NEW }}
@@ -27,19 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install tf-playwright-stealth
-          python -m playwright install --with-deps
+          python -m playwright install
 
-      - name: 🚀 Run scraping scripts
-        run: |
-          python monaca.py
-
-      - name: 🚀 Run scraping scripts
-        run: |
-          python nse.py
-
-      - name: 🚀 Run scraping scripts
-        run: |
-          python sheshaview.py
-      - name: 🚀 Run scraping scripts
-        run: |
-          python indpe.py
+      - name: 🚀 Run AAA scraper
+        run: python aaa.py
