@@ -14,7 +14,8 @@ xpaths = {
     "Industry PE": "/html/body/main/div[3]/div[3]/div[2]/ul/li[12]/span[2]/span",
     "FII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[17]/span[2]/span",
     "DII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[16]/span[2]/span",
-    "Debt to equity": "/html/body/main/div[3]/div[3]/div[2]/ul/li[6]/span[2]/span"
+    "Debt to equity": "/html/body/main/div[3]/div[3]/div[2]/ul/li[6]/span[2]/span",
+    "Promoter holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[11]/span[2]/span"
 }
 
 # ====== HELPERS ======
