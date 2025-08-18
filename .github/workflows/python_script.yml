@@ -29,17 +29,17 @@ jobs:
           pip install tf-playwright-stealth
           python -m playwright install --with-deps
 
-      - name: 🚀 Run scraping scripts
-        run: |
-          python monaca.py
+      #- name: 🚀 Run scraping scripts
+       # run: |
+       #   python monaca.py
 
-      - name: 🚀 Run scraping scripts
-        run: |
-          python nse.py
+      #- name: 🚀 Run scraping scripts
+      # run: |
+      #    python nse.py
 
-      - name: 🚀 Run scraping scripts
-        run: |
-          python sheshaview.py
+      #- name: 🚀 Run scraping scripts
+      #  run: |
+      #    python sheshaview.py
       - name: 🚀 Run scraping scripts
         run: |
           python indpe.py
