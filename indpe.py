@@ -1,3 +1,4 @@
+'''
 from playwright.sync_api import sync_playwright
 import json
 from google_sheets import get_google_credentials, authorize_google_sheets
@@ -100,12 +101,12 @@ with sync_playwright() as p:
 
     browser.close()
 '''
-
 from playwright.sync_api import sync_playwright
 import json
 from google_sheets import get_google_credentials, authorize_google_sheets
 import time
 import gspread
+from datetime import datetime
 
 # ====== CONFIG ======
 COOKIE_FILE = "screener.json"
@@ -180,19 +181,20 @@ with sync_playwright() as p:
         try:
             page.goto(f"{BASE_URL}{nse_code}/", timeout=30000)
 
-            scraped_data = [
-                get_text_with_wait(page, xpath) for name, xpath in xpaths.items()
-            ]
+            scraped_data = [get_text_with_wait(page, xpath) for name, xpath in xpaths.items()]
 
-            update_with_retry(worksheet, f"B{i}:F{i}", [scraped_data])
+            # Add timestamp
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            scraped_data.append(timestamp)  # This will go to column G
+
+            update_with_retry(worksheet, f"B{i}:G{i}", [scraped_data])
             print(f"✅ Row {i} updated: {scraped_data}")
 
         except Exception as e:
             try:
-                update_with_retry(worksheet, f"B{i}:F{i}", [["ERROR"] * 5])
+                update_with_retry(worksheet, f"B{i}:G{i}", [["ERROR"]*5 + [datetime.now().strftime("%Y-%m-%d %H:%M:%S")]])
             except Exception as e2:
                 print(f"❌ Failed to update error status for row {i}: {e2}")
             print(f"❌ Row {i} failed: {e}")
 
     browser.close()
-'''
