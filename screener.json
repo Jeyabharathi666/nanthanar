@@ -1,28 +1,28 @@
 [
-    {
-        "domain": "www.screener.in",
-        "expirationDate": 1757465295.961111,
-        "hostOnly": true,
-        "httpOnly": true,
-        "name": "sessionid",
-        "path": "/",
-        "sameSite": "lax",
-        "secure": true,
-        "session": false,
-        "storeId": null,
-        "value": "sl9zhue4oivpegm0kgf89xghz2n5l3jb"
-    },
-    {
-        "domain": "www.screener.in",
-        "expirationDate": 1786863079.467725,
-        "hostOnly": true,
-        "httpOnly": false,
-        "name": "csrftoken",
-        "path": "/",
-        "sameSite": "lax",
-        "secure": true,
-        "session": false,
-        "storeId": null,
-        "value": "V12I2bLrEscql3wSh3tUyfX0fHIDxDYV"
-    }
+  {
+    "domain": "www.screener.in",
+    "expirationDate": 1788941815.693447,
+    "hostOnly": true,
+    "httpOnly": false,
+    "name": "csrftoken",
+    "path": "/",
+    "sameSite": "lax",
+    "secure": true,
+    "session": false,
+    "storeId": "0",
+    "value": "y6TA8HI9yzb27pPi6zvGu0OxtWswUvX0"
+  },
+  {
+    "domain": "www.screener.in",
+    "expirationDate": 1759992083.649026,
+    "hostOnly": true,
+    "httpOnly": true,
+    "name": "sessionid",
+    "path": "/",
+    "sameSite": "lax",
+    "secure": true,
+    "session": false,
+    "storeId": "0",
+    "value": "kjeh3nw3wudskmi005uckvj8l6hycxah"
+  }
 ]
