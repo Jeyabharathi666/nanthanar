@@ -1,3 +1,4 @@
+
 import requests
 from datetime import datetime
 import google_sheets  # Your separate module
@@ -40,6 +41,7 @@ def main():
     headers = ["NSE", "SENTIMENT_SCORE", "SENTIMENT", "VALUE"]
     rows = []
 
+    # Get sentiment data
     for ticker in tickers:
         sentiment_score, sentiment_label = get_sentiment_for_ticker(ticker)
         if sentiment_score is not None:
@@ -47,7 +49,12 @@ def main():
         else:
             rows.append([ticker, "NO DATA FOUND", "NO DATA FOUND", "NO DATA FOUND"])
 
+    # Append rows to Google Sheet
     google_sheets.update_google_sheet_by_name(SHEET_ID, WORKSHEET_NAME, headers, rows)
+
+    # Append timestamp as a separate row at the end
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    google_sheets.append_footer(SHEET_ID, WORKSHEET_NAME, [now])
 
 if __name__ == "__main__":
     main()
