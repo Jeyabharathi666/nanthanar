@@ -40,7 +40,5 @@ jobs:
       - name: 🚀 Run scraping scripts
         run: |
           python indpe.py
-      - name: 🚀 Run scraping scripts
-        run: |
-          python sentiment.py
+      
           
