@@ -38,7 +38,7 @@ def get_sentiment_for_ticker(ticker):
         return None, None
 
 def main():
-    tickers = ["NIFTY", "NIFTY_BANK"]
+    tickers = ["^NSEI", "NIFTY_BANK"]
     headers = ["NSE", "SENTIMENT_SCORE", "SENTIMENT", "VALUE"]
     rows = []
 
