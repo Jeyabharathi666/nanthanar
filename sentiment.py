@@ -23,6 +23,7 @@ def get_sentiment_for_ticker(ticker):
             for e in entities:
                 if e.get("symbol") == ticker and "sentiment_score" in e:
                     sentiments.append(e["sentiment_score"])
+    print(sentimens)
     
     if sentiments:
         avg_sentiment = sum(sentiments) / len(sentiments)
