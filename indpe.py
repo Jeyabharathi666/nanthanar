@@ -115,11 +115,14 @@ SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
 WORKSHEET_NAME = "indpe"
 
 xpaths = {
-    "Industry PE": "/html/body/main/div[3]/div[3]/div[2]/ul/li[12]/span[2]/span",
-    "FII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[17]/span[2]/span",
-    "DII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[16]/span[2]/span",
-    "Debt to equity": "/html/body/main/div[3]/div[3]/div[2]/ul/li[6]/span[2]/span",
-    "Promoter holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[11]/span[2]/span"
+   
+    "Industry PE": "//*[@id='top-ratios']/li[16]/span[2]/span",
+    "FII holding": "//*[@id='top-ratios']/li[17]/span[2]/span",
+    "DII holding": "//*[@id='top-ratios']/li[18]/span[2]/span",
+    "Debt to equity": "//*[@id='top-ratios']/li[15]/span[2]/span",
+    "Promoter holding": "//*[@id='top-ratios']/li[10]/span[2]/span"
+
+
 }
 
 # ====== HELPERS ======
