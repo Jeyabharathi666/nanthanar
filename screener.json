@@ -1,7 +1,7 @@
 [
   {
     "domain": "www.screener.in",
-    "expirationDate": 1788941815.693447,
+    "expirationDate": 1794210076.96691,
     "hostOnly": true,
     "httpOnly": false,
     "name": "csrftoken",
@@ -10,11 +10,11 @@
     "secure": true,
     "session": false,
     "storeId": "0",
-    "value": "y6TA8HI9yzb27pPi6zvGu0OxtWswUvX0"
+    "value": "3orZuW2PfY1HQFJaAenhSUUnVraxztaR"
   },
   {
     "domain": "www.screener.in",
-    "expirationDate": 1759992083.649026,
+    "expirationDate": 1765260467.488333,
     "hostOnly": true,
     "httpOnly": true,
     "name": "sessionid",
@@ -23,6 +23,6 @@
     "secure": true,
     "session": false,
     "storeId": "0",
-    "value": "kjeh3nw3wudskmi005uckvj8l6hycxah"
+    "value": "xmopt5kk5njkr0mwboq9ogfq2shzt0z4"
   }
 ]
