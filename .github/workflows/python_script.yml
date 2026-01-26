@@ -30,16 +30,16 @@ jobs:
           python -m playwright install --with-deps
       - name: 🚀 Run scraping scripts
         run: |
-          python monaca.py
+          #python monaca.py
       - name: 🚀 Run scraping scripts
         run: |
-          python nse.py
+          #python nse.py
       - name: 🚀 Run scraping scripts
         run: |
-          python sheshaview.py
+          #python sheshaview.py
       - name: 🚀 Run scraping scripts
         run: |
-          python indpe.py
+          #python indpe.py
       - name: 🚀 Run news scripts
         run: |
           python news.py
