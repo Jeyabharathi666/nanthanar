@@ -40,7 +40,7 @@ jobs:
       - name: 🚀 Run scraping scripts
         run: |
           python indpe.py
-      - name: 🚀 Run scraping scripts
+      - name: 🚀 Run news scripts
         run: |
           python news.py
       
