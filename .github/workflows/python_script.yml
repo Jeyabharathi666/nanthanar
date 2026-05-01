@@ -40,8 +40,11 @@ jobs:
       - name: 🚀 Run scraping scripts
         run: |
           python indpe.py
-      - name: 🚀 Run news scripts
-        run: |
-          python news.py
+      - name: Run script
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          NEW: ${{ secrets.NEW }}
+        run: python indpe.py
       
           
