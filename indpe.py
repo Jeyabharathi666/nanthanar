@@ -1,203 +1,155 @@
-'''
-from playwright.sync_api import sync_playwright
-import json
-from google_sheets import get_google_credentials, authorize_google_sheets
-import time
 import gspread
-
-# ====== CONFIG ======
-COOKIE_FILE = "screener.json"
-BASE_URL = "https://www.screener.in/company/"
-SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
-WORKSHEET_NAME = "indpe"
-
-xpaths = {
-    "Industry PE": "/html/body/main/div[3]/div[3]/div[2]/ul/li[12]/span[2]/span",
-    "FII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[17]/span[2]/span",
-    "DII holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[16]/span[2]/span",
-    "Debt to equity": "/html/body/main/div[3]/div[3]/div[2]/ul/li[6]/span[2]/span",
-    "Promoter holding": "/html/body/main/div[3]/div[3]/div[2]/ul/li[11]/span[2]/span"
-}
-
-# ====== HELPERS ======
-def update_with_retry(worksheet, cell_range, values, max_retries=5):
-    retries = 0
-    while retries < max_retries:
-        try:
-            worksheet.update(cell_range, values)
-            return
-        except gspread.exceptions.APIError as e:
-            if '429' in str(e):
-                print("⚠️ Quota exceeded, waiting 30 seconds before retrying...")
-                time.sleep(30)
-                retries += 1
-            else:
-                raise
-    raise Exception("Max retries exceeded for Google Sheets update due to quota limits.")
-
-def get_text_with_wait(page, xpath, retries=10, delay=1):
-    """Try to extract text from an element, waiting until it loads."""
-    for _ in range(retries):
-        el = page.locator(f"xpath={xpath}")
-        if el.count() > 0:
-            text = el.inner_text().strip()
-            if text:  # not empty
-                return text
-        time.sleep(delay)
-    return "NA"
-
-# ====== MAIN ======
-# Load cookies
-with open(COOKIE_FILE, "r", encoding="utf-8") as f:
-    cookies = json.load(f)
-
-for cookie in cookies:
-    if "sameSite" not in cookie or cookie["sameSite"] not in ["Strict", "Lax", "None"]:
-        cookie["sameSite"] = "Lax"
-    if cookie["sameSite"] == "None":
-        cookie["secure"] = True
-
-# Google Sheets connection
-credentials = get_google_credentials()
-gc = authorize_google_sheets(credentials)
-worksheet = gc.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
-rows = worksheet.get_all_values()
-
-# Launch browser and reuse context/page for all NSE codes
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)  # set False for debugging
-    context = browser.new_context()
-    context.add_cookies(cookies)
-    page = context.new_page()
-
-    for i, row in enumerate(rows[1:], start=2):
-        nse_code = row[0].strip()
-        if not nse_code:
-            continue
-
-        print(f"Scraping {nse_code} (Row {i})...")
-
-        try:
-            page.goto(f"{BASE_URL}{nse_code}/", timeout=30000)
-
-            scraped_data = []
-            for name, xpath in xpaths.items():
-                try:
-                    value = get_text_with_wait(page, xpath, retries=10, delay=1)
-                except Exception:
-                    value = "NA"
-                scraped_data.append(value)
-                print(f"  {name}: {value}")
-
-            update_with_retry(worksheet, f"B{i}:F{i}", [scraped_data])
-            print(f"✅ Row {i} updated: {scraped_data}")
-
-        except Exception as e:
-            try:
-                update_with_retry(worksheet, f"B{i}:E{i}", [["ERROR", "ERROR", "ERROR", "ERROR"]])
-            except Exception as e2:
-                print(f"❌ Failed to update error status for row {i}: {e2}")
-            print(f"❌ Row {i} failed: {e}")
-
-    browser.close()
-'''
+from google.oauth2.service_account import Credentials
 from playwright.sync_api import sync_playwright
-import json
-from google_sheets import get_google_credentials, authorize_google_sheets
 import time
-import gspread
-from datetime import datetime
 
-# ====== CONFIG ======
-COOKIE_FILE = "screener.json"
-BASE_URL = "https://www.screener.in/company/"
-SHEET_ID = "1QN5GMlxBKMudeHeWF-Kzt9XsqTt01am7vze1wBjvIdE"
-WORKSHEET_NAME = "indpe"
+SCREENER_EMAIL    = "pags40502@gmail.com"
+SCREENER_PASSWORD = "Chiranjeevee1$"
 
-xpaths = {
-   
-    "Industry PE": "//*[@id='top-ratios']/li[16]/span[2]/span",
-    "FII holding": "//*[@id='top-ratios']/li[17]/span[2]/span",
-    "DII holding": "//*[@id='top-ratios']/li[18]/span[2]/span",
-    "Debt to equity": "//*[@id='top-ratios']/li[15]/span[2]/span",
-    "Promoter holding": "//*[@id='top-ratios']/li[10]/span[2]/span"
+GOOGLE_CREDS_FILE = "credentials.json"
+SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
+SHEET_TAB = "nt"
+DATA_START_ROW = 2
 
+OUTPUT_HEADERS = [
+    "PE", "BOKVAL", "DIVDND",
+    "ROCE", "ROE", "Face",
+    "INDPE", "FII", "DII", "DTE",
+    "Promoters"
+]
 
-}
+def login(page):
+    page.goto("https://www.screener.in/login/")
+    page.fill("input[name='username']", SCREENER_EMAIL)
+    page.fill("input[name='password']", SCREENER_PASSWORD)
+    page.click("button[type='submit']")
+    page.wait_for_url("**/dash/**")
+    print("✅ Logged in")
 
-# ====== HELPERS ======
-def update_with_retry(worksheet, cell_range, values, max_retries=5):
-    retries = 0
-    while retries < max_retries:
-        try:
-            worksheet.update(cell_range, values)
-            return
-        except gspread.exceptions.APIError as e:
-            if '429' in str(e):
-                print("⚠️ Quota exceeded, waiting 30s before retrying...")
-                time.sleep(30)
-                retries += 1
-            else:
-                raise
-    raise Exception("Max retries exceeded for Google Sheets update.")
+def scrape_stock(page, symbol):
 
-def get_text_with_wait(page, xpath, timeout=5000):
-    """Extract text using Playwright’s built-in wait."""
+    def extract():
+        data = {h: "" for h in OUTPUT_HEADERS}
+
+        # SUMMARY
+        for li in page.query_selector_all(".company-ratios li"):
+            name = li.query_selector("span.name").inner_text().strip()
+            val_el = li.query_selector("span.nowrap span.number, span.number")
+            val = val_el.inner_text().strip() if val_el else ""
+
+            if name == "Stock P/E":
+                data["PE"] = val
+            elif name == "Book Value":
+                data["BOKVAL"] = val
+            elif name == "Dividend Yield":
+                data["DIVDND"] = val
+            elif name == "ROCE":
+                data["ROCE"] = val
+            elif name == "ROE":
+                data["ROE"] = val
+            elif name == "Face Value":
+                data["Face"] = val
+
+        # TOP RATIOS
+        for li in page.query_selector_all("#top-ratios li"):
+            name = li.query_selector("span.name").inner_text().strip()
+            val_el = li.query_selector("span.nowrap span.number, span.number")
+            val = val_el.inner_text().strip() if val_el else ""
+
+            if name == "Industry PE":
+                data["INDPE"] = val
+            elif name == "FII holding":
+                data["FII"] = val
+            elif name == "DII holding":
+                data["DII"] = val
+            elif name == "Debt to equity":
+                data["DTE"] = val
+
+        # PROMOTERS
+        for row in page.query_selector_all("#shareholding table tr"):
+            if "Promoters" in row.inner_text():
+                cols = row.query_selector_all("td")
+                if cols:
+                    data["Promoters"] = cols[-1].inner_text().strip()
+                break
+
+        return data
+
+    # 🔹 TRY CONSOLIDATED
+    page.goto(f"https://www.screener.in/company/{symbol}/consolidated/")
     try:
-        el = page.locator(f"xpath={xpath}")
-        el.wait_for(state="visible", timeout=timeout)
-        return el.inner_text().strip()
+        page.wait_for_selector("#top-ratios li span.name", timeout=4000)
+        page.wait_for_timeout(800)
     except:
-        return "NA"
+        pass
 
-# ====== MAIN ======
-# Load cookies
-with open(COOKIE_FILE, "r", encoding="utf-8") as f:
-    cookies = json.load(f)
+    data = extract()
 
-for cookie in cookies:
-    if "sameSite" not in cookie or cookie["sameSite"] not in ["Strict", "Lax", "None"]:
-        cookie["sameSite"] = "Lax"
-    if cookie["sameSite"] == "None":
-        cookie["secure"] = True
+    # 🔴 SIMPLE FALLBACK
+    if not data["INDPE"] or data["INDPE"] == "—":
+        print(f"→ fallback: {symbol}")
 
-# Google Sheets connection
-credentials = get_google_credentials()
-gc = authorize_google_sheets(credentials)
-worksheet = gc.open_by_key(SHEET_ID).worksheet(WORKSHEET_NAME)
-rows = worksheet.get_all_values()
-
-# Launch browser once, reuse context/page
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    context = browser.new_context()
-    context.add_cookies(cookies)
-    page = context.new_page()
-
-    for i, row in enumerate(rows[1:], start=2):
-        nse_code = row[0].strip()
-        if not nse_code:
-            continue
-
-        print(f"Scraping {nse_code} (Row {i})...")
-
+        page.goto(f"https://www.screener.in/company/{symbol}/")
         try:
-            page.goto(f"{BASE_URL}{nse_code}/", timeout=30000)
+            page.wait_for_selector("#top-ratios li span.name", timeout=4000)
+            page.wait_for_timeout(800)
+        except:
+            pass
 
-            scraped_data = [get_text_with_wait(page, xpath) for name, xpath in xpaths.items()]
+        data = extract()
 
-            # Add timestamp
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            scraped_data.append(timestamp)  # This will go to column G
+    return data
 
-            update_with_retry(worksheet, f"B{i}:G{i}", [scraped_data])
-            print(f"✅ Row {i} updated: {scraped_data}")
 
-        except Exception as e:
+if __name__ == "__main__":
+
+    creds = Credentials.from_service_account_file(
+        GOOGLE_CREDS_FILE,
+        scopes=[
+            "https://www.googleapis.com/auth/spreadsheets",
+            "https://www.googleapis.com/auth/drive"
+        ]
+    )
+
+    sheet = gspread.authorize(creds).open_by_key(SHEET_ID).worksheet(SHEET_TAB)
+
+    symbols = [
+        s.strip().upper()
+        for s in sheet.col_values(2)[DATA_START_ROW - 1:]
+        if s.strip()
+    ]
+
+    print(f"📋 {len(symbols)} symbols found")
+
+    sheet.update(values=[OUTPUT_HEADERS], range_name="L1:V1")
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+
+        login(page)
+
+        for i, symbol in enumerate(symbols):
+            row_num = DATA_START_ROW + i
+            print(f"\n[{i+1}/{len(symbols)}] {symbol}")
+
             try:
-                update_with_retry(worksheet, f"B{i}:G{i}", [["ERROR"]*5 + [datetime.now().strftime("%Y-%m-%d %H:%M:%S")]])
-            except Exception as e2:
-                print(f"❌ Failed to update error status for row {i}: {e2}")
-            print(f"❌ Row {i} failed: {e}")
+                data = scrape_stock(page, symbol)
+            except Exception as e:
+                print("ERROR:", e)
+                data = {h: "" for h in OUTPUT_HEADERS}
 
-    browser.close()
+            row_values = [data.get(h, "") for h in OUTPUT_HEADERS]
+
+            # ✅ ROW BY ROW UPDATE
+            sheet.update(
+                values=[row_values],
+                range_name=f"L{row_num}:V{row_num}"
+            )
+
+            print(f"✅ Row {row_num} updated")
+            time.sleep(0.4)
+
+        browser.close()
+
+    print("\n🎉 DONE")
