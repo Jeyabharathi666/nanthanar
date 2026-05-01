@@ -2,11 +2,12 @@ import gspread
 from google.oauth2.service_account import Credentials
 from playwright.sync_api import sync_playwright
 import time
+import json
+import os
 
-SCREENER_EMAIL    = "pags40502@gmail.com"
-SCREENER_PASSWORD = "Chiranjeevee1$"
-
-GOOGLE_CREDS_FILE = "credentials.json"
+SCREENER_EMAIL    = os.environ.get("EMAIL")
+SCREENER_PASSWORD = os.environ.get("PASSWORD")
+GOOGLE_CREDS_JSON = os.environ.get("NEW")  # JSON string
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
 SHEET_TAB = "nt"
 DATA_START_ROW = 2
@@ -103,14 +104,14 @@ def scrape_stock(page, symbol):
 
 if __name__ == "__main__":
 
-    creds = Credentials.from_service_account_file(
-        GOOGLE_CREDS_FILE,
+    creds_dict = json.loads(GOOGLE_CREDS_JSON)
+    creds = Credentials.from_service_account_info(
+        creds_dict,
         scopes=[
             "https://www.googleapis.com/auth/spreadsheets",
             "https://www.googleapis.com/auth/drive"
         ]
     )
-
     sheet = gspread.authorize(creds).open_by_key(SHEET_ID).worksheet(SHEET_TAB)
 
     symbols = [
