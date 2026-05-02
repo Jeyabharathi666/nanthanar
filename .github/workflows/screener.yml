@@ -24,5 +24,5 @@ jobs:
         env:
           EMAIL: ${{ secrets.EMAIL }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          NEW: ${{ secrets.NEW }}
+          NEW: ${{ secrets.NEW2 }}
         run: python indpe.py
