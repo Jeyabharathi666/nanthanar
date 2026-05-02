@@ -28,4 +28,4 @@ jobs:
         run: |
           python monaca.py
           python nse.py
-          python sheshaview.py
+         # python sheshaview.py
