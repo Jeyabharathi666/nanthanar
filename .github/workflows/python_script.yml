@@ -1,4 +1,4 @@
-name: Run Scripts Every 3 Hours
+name: Run Scripts Every 5 Hours
 
 on:
   schedule:
