@@ -37,9 +37,6 @@ jobs:
       - name: 🚀 Run scraping scripts
         run: |
           python sheshaview.py
-      - name: 🚀 Run scraping scripts
-        run: |
-          python indpe.py
       - name: Run script
         env:
           EMAIL: ${{ secrets.EMAIL }}
