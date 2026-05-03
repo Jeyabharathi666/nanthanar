@@ -15,7 +15,7 @@ DATA_START_ROW = 2
 OUTPUT_HEADERS = [
     "PE", "BOKVAL", "DIVDND",
     "ROCE", "ROE", "Face",
-    "INDPE", "FII", "DII", "DTE",
+    "INDPE", "FII", "DII", "DTE","PLE",
     "Promoters"
 ]
 
@@ -65,6 +65,9 @@ def scrape_stock(page, symbol):
                 data["DII"] = val
             elif name == "Debt to equity":
                 data["DTE"] = val
+            name = name.lower()
+            if "pledged" in name:
+                data["PLE"] = val
 
         # PROMOTERS
         for row in page.query_selector_all("#shareholding table tr"):
@@ -122,7 +125,7 @@ if __name__ == "__main__":
 
     print(f"📋 {len(symbols)} symbols found")
 
-    sheet.update(values=[OUTPUT_HEADERS], range_name="L1:V1")
+    sheet.update(values=[OUTPUT_HEADERS], range_name="L1:W1")
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -145,7 +148,7 @@ if __name__ == "__main__":
             # ✅ ROW BY ROW UPDATE
             sheet.update(
                 values=[row_values],
-                range_name=f"L{row_num}:V{row_num}"
+                range_name=f"L{row_num}:W{row_num}"
             )
 
             print(f"✅ Row {row_num} updated")
