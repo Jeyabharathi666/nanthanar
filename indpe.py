@@ -90,7 +90,7 @@ def scrape_stock(page, symbol):
     data = extract()
 
     # 🔴 SIMPLE FALLBACK
-    if not data["INDPE"] or data["INDPE"] == "—":
+    if not data["INDPE"] or data["INDPE"] == "":
         print(f"→ fallback: {symbol}")
 
         page.goto(f"https://www.screener.in/company/{symbol}/")
