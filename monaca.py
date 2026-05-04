@@ -62,7 +62,7 @@ except Exception as e:
 
 # === PREPARE DATA ===
 rows = [[
-    "Stock", "Analysts", "Buys", "Holds", "CMP",
+    "Stock", "Buys", "Holds", "CMP","Analysts",
     "Low (₹)", "Low (%)",
     "Avg (₹)", "Avg (%)",
     "High (₹)", "High (%)"
@@ -92,7 +92,7 @@ for idea in stock_ideas:
                 high_pct = target.get("percentages", "N/A") or "N/A"
 
         rows.append([
-            name, analysts, buys, holds, cmp,
+            name, buys, holds, cmp,analysts,
             low_val, low_pct,
             avg_val, avg_pct,
             high_val, high_pct
