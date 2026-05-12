@@ -57,16 +57,21 @@ def scrape_stock(page, symbol):
             val_el = li.query_selector("span.nowrap span.number, span.number")
             val = val_el.inner_text().strip() if val_el else ""
 
-            if name == "Industry PE":
+            lname = name.lower()
+
+            if "industry pe" in lname:
                 data["INDPE"] = val
-            elif name == "FII holding":
+            
+            elif "fii holding" in lname:
                 data["FII"] = val
-            elif name == "DII holding":
+            
+            elif "dii holding" in lname:
                 data["DII"] = val
-            elif name == "Debt to equity":
+            
+            elif "debt" in lname:
                 data["DEPT"] = val
-            name = name.lower()
-            if "pledged" in name:
+            
+            elif "pledg" in lname:
                 data["PLDGE"] = val
 
         # PROMOTERS
