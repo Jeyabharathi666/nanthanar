@@ -110,7 +110,7 @@ try:
     print(f"📤 Uploading to Google Sheet '{WORKSHEET_NAME}'...")
     #safe_clear(sheet)
     safe_update(sheet, "A1", [[row[0]] for row in rows])
-    safe_update(sheet, "E1", [row[4:] for row in rows])
+    safe_update(sheet, "F1", [row[5:] for row in rows])
     print(f"✅ Uploaded {len(rows)-2} stock ideas successfully. Timestamp: {timestamp}")
 except Exception as e:
     print(f"❌ Final upload error: {e}")
