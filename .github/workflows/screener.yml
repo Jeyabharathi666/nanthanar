@@ -1,8 +1,8 @@
-name: Run INDPE Sunday Midnight
+name: Run INDPE Everyday Midnight
 
 on:
   schedule:
-    - cron: "30 18 * * 6"   # Sunday 00:00 IST
+    - cron: "30 18 * * *"  #everydat midnight
   workflow_dispatch:
 
 jobs:
