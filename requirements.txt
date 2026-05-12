@@ -42,3 +42,4 @@ selenium
 beautifulsoup4
 pandas-market-calendars
 nselib
+rapidfuzz
