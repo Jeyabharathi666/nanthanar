@@ -26,7 +26,7 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           NEW: ${{ secrets.NEW }}
         run: |
-          python monaca.py
-          python nse.py
+          # python monaca.py
+          # python nse.py
           sector.py
          # python sheshaview.py
