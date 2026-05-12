@@ -28,5 +28,5 @@ jobs:
         run: |
           # python monaca.py
           # python nse.py
-          sector.py
+          python sector.py
          # python sheshaview.py
