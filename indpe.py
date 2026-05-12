@@ -50,6 +50,11 @@ def scrape_stock(page, symbol):
                 data["ROE"] = val
             elif name == "Face Value":
                 data["Face"] = val
+            elif "debt" in lname:
+                data["DEBT"] = val
+            
+            elif "pledg" in lname:
+                data["PLDGE"] = val
 
         # TOP RATIOS
         for li in page.query_selector_all("#top-ratios li"):
@@ -68,11 +73,7 @@ def scrape_stock(page, symbol):
             elif "dii holding" in lname:
                 data["DII"] = val
             
-            elif "debt" in lname:
-                data["DEBT"] = val
-            
-            elif "pledg" in lname:
-                data["PLDGE"] = val
+
 
         # PROMOTERS
         for row in page.query_selector_all("#shareholding table tr"):
