@@ -29,4 +29,3 @@ jobs:
           python monaca.py
           python nse.py
           python sector.py
-         # python sheshaview.py
