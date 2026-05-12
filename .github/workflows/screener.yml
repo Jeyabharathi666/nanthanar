@@ -25,4 +25,4 @@ jobs:
           EMAIL: ${{ secrets.EMAIL }}
           PASSWORD: ${{ secrets.PASSWORD }}
           NEW: ${{ secrets.NEW2 }}
-        run: python indpe.py
+        run: python indpesre.py
