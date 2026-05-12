@@ -15,7 +15,7 @@ DATA_START_ROW = 4
 OUTPUT_HEADERS = [
     "PE", "BOKVAL", "DIVDND",
     "ROCE", "ROE", "Face",
-    "INDPE", "FII", "DII", "DEPT","PLDGE",
+    "INDPE", "FII", "DII", "DEBT","PLDGE",
     "Promoters"
 ]
 
@@ -69,7 +69,7 @@ def scrape_stock(page, symbol):
                 data["DII"] = val
             
             elif "debt" in lname:
-                data["DEPT"] = val
+                data["DEBT"] = val
             
             elif "pledg" in lname:
                 data["PLDGE"] = val
