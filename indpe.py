@@ -15,7 +15,7 @@ DATA_START_ROW = 2
 OUTPUT_HEADERS = [
     "PE", "BOKVAL", "DIVDND",
     "ROCE", "ROE", "Face",
-    "INDPE", "FII", "DII", "DTE","PLE",
+    "INDPE", "FII", "DII", "DEPT","PLDGE",
     "Promoters"
 ]
 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
     print(f"📋 {len(symbols)} symbols found")
 
-    sheet.update(values=[OUTPUT_HEADERS], range_name="L1:W1")
+    sheet.update(values=[OUTPUT_HEADERS], range_name="M1:X1")
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -148,7 +148,7 @@ if __name__ == "__main__":
             # ✅ ROW BY ROW UPDATE
             sheet.update(
                 values=[row_values],
-                range_name=f"L{row_num}:W{row_num}"
+                range_name=f"M{row_num}:X{row_num}"
             )
 
             print(f"✅ Row {row_num} updated")
