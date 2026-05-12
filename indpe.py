@@ -64,10 +64,10 @@ def scrape_stock(page, symbol):
             elif name == "DII holding":
                 data["DII"] = val
             elif name == "Debt to equity":
-                data["DTE"] = val
+                data["DEPT"] = val
             name = name.lower()
             if "pledged" in name:
-                data["PLE"] = val
+                data["PLDGE"] = val
 
         # PROMOTERS
         for row in page.query_selector_all("#shareholding table tr"):
