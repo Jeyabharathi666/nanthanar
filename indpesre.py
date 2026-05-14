@@ -96,55 +96,54 @@ def scrape_stock(page, symbol):
         data = {}
     
         data["PE"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[4]/span[2]/span"
+            "//li[span[contains(text(),'Stock P/E')]]/span[2]"
         )
     
         data["BOKVAL"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[5]/span[2]/span"
+            "//li[span[contains(text(),'Book Value')]]/span[2]"
         )
     
         data["DIVDND"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[6]/span[2]/span"
+            "//li[span[contains(text(),'Dividend Yield')]]/span[2]"
         )
     
         data["ROCE"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[7]/span[2]/span"
+            "//li[span[contains(text(),'ROCE')]]/span[2]"
         )
     
         data["ROE"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[8]/span[2]/span"
+            "//li[span[contains(text(),'ROE')]]/span[2]"
         )
     
         data["Face"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[9]/span[2]/span"
+            "//li[span[contains(text(),'Face Value')]]/span[2]"
         )
     
         data["Promoters"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[10]/span[2]/span"
+            "//li[span[contains(text(),'Promoter holding')]]/span[2]"
         )
     
         data["PLDGE"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[11]/span[2]/span"
+            "//li[span[contains(text(),'Pledged percentage')]]/span[2]"
         )
     
         data["DEBT"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[15]/span[2]/span"
+            "//li[span[contains(text(),'Debt')]]/span[2]"
         )
     
         data["INDPE"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[16]/span[2]/span"
+            "//li[span[contains(text(),'Industry PE')]]/span[2]"
         )
     
         data["FII"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[17]/span[2]/span"
+            "//li[span[contains(text(),'FII')]]/span[2]"
         )
     
         data["DII"] = get_text(
-            "/html/body/main/div[3]/div[3]/div[2]/ul/li[18]/span[2]/span"
+            "//li[span[contains(text(),'DII')]]/span[2]"
         )
     
         return data
-
     # 🔹 TRY CONSOLIDATED
     page.goto(f"https://www.screener.in/company/{symbol}/consolidated/")
     try:
