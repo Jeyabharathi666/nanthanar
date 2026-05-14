@@ -61,13 +61,13 @@ def scrape_stock(page, symbol):
 
             lname = name.lower()
 
-            if "Industry PE" in lname:
+            if "industry PE" in lname:
                 data["INDPE"] = val
             
-            elif "FII holding" in lname:
+            elif "fii holding" in lname:
                 data["FII"] = val
             
-            elif "DII holding" in lname:
+            elif "dii holding" in lname:
                 data["DII"] = val
             elif "Debt" in lname:
                 data["DEBT"] = val
