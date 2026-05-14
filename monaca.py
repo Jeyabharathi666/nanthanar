@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from gspread.exceptions import APIError
 import time
 from google_sheets import get_google_credentials, authorize_google_sheets
@@ -102,8 +103,11 @@ for idea in stock_ideas:
         continue
 
 # === ADD TIMESTAMP FOOTER ===
-timestamp = datetime.now().strftime("Updated on %d-%m-%Y at %I:%M %p")
-rows.append([""] * 10 + [timestamp])  # Timestamp in last column
+timestamp = datetime.now(
+    ZoneInfo("Asia/Kolkata")
+).strftime("Updated on %d-%m-%Y at %I:%M %p IST")
+
+rows.append([""] * 10 + [timestamp])
 
 # === UPLOAD TO GOOGLE SHEET ===
 try:
