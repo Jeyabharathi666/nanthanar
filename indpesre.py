@@ -61,24 +61,24 @@ def scrape_stock(page, symbol):
 
             lname = name.lower()
 
-            if "industry pe" in lname:
+            if "Industry PE" in lname:
                 data["INDPE"] = val
             
-            elif "fii holding" in lname:
+            elif "FII holding" in lname:
                 data["FII"] = val
             
-            elif "dii holding" in lname:
+            elif "DII holding" in lname:
                 data["DII"] = val
-            elif "debt" in lname:
+            elif "Debt" in lname:
                 data["DEBT"] = val
             
-            elif "pledg" in lname:
+            elif "Pledged percentage" in lname:
                 data["PLDGE"] = val        
 
 
         # PROMOTERS
         for row in page.query_selector_all("#shareholding table tr"):
-            if "Promoters" in row.inner_text():
+            if "Promoter holding" in row.inner_text():
                 cols = row.query_selector_all("td")
                 if cols:
                     data["Promoters"] = cols[-1].inner_text().strip()
