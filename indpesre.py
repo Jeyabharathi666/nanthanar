@@ -30,120 +30,120 @@ def login(page):
 
 def scrape_stock(page, symbol):
 
-    def extract():
-        data = {h: "" for h in OUTPUT_HEADERS}
-
-        # SUMMARY
-        for li in page.query_selector_all(".company-ratios li"):
-            name = li.query_selector("span.name").inner_text().strip()
-            val_el = li.query_selector("span.nowrap span.number, span.number")
-            val = val_el.inner_text().strip() if val_el else ""
-
-            if name == "Stock P/E":
-                data["PE"] = val
-            elif name == "Book Value":
-                data["BOKVAL"] = val
-            elif name == "Dividend Yield":
-                data["DIVDND"] = val
-            elif name == "ROCE":
-                data["ROCE"] = val
-            elif name == "ROE":
-                data["ROE"] = val
-            elif name == "Face Value":
-                data["Face"] = val
-
-
-        # TOP RATIOS
-        for li in page.query_selector_all("#top-ratios li"):
-            name = li.query_selector("span.name").inner_text().strip()
-            val_el = li.query_selector("span.nowrap span.number, span.number")
-            val = val_el.inner_text().strip() if val_el else ""
-
-            lname = name.lower()
-
-            if "industry PE" in lname:
-                data["INDPE"] = val
-            
-            elif "fii holding" in lname:
-                data["FII"] = val
-            
-            elif "dii holding" in lname:
-                data["DII"] = val
-            elif "Debt" in lname:
-                data["DEBT"] = val
-            
-            elif "Pledged percentage" in lname:
-                data["PLDGE"] = val        
-
-
-        # PROMOTERS
-        for row in page.query_selector_all("#shareholding table tr"):
-            if "Promoter holding" in row.inner_text():
-                cols = row.query_selector_all("td")
-                if cols:
-                    data["Promoters"] = cols[-1].inner_text().strip()
-                break
-
-        return data
     # def extract():
+    #     data = {h: "" for h in OUTPUT_HEADERS}
 
-    #     def get_text(xpath):
-    #         try:
-    #             return page.locator(f"xpath={xpath}").inner_text().strip()
-    #         except:
-    #             return ""
-    
-    #     data = {}
-    
-    #     data["PE"] = get_text(
-    #         "//li[span[contains(text(),'Stock P/E')]]/span[2]"
-    #     )
-    
-    #     data["BOKVAL"] = get_text(
-    #         "//li[span[contains(text(),'Book Value')]]/span[2]"
-    #     )
-    
-    #     data["DIVDND"] = get_text(
-    #         "//li[span[contains(text(),'Dividend Yield')]]/span[2]"
-    #     )
-    
-    #     data["ROCE"] = get_text(
-    #         "//li[span[contains(text(),'ROCE')]]/span[2]"
-    #     )
-    
-    #     data["ROE"] = get_text(
-    #         "//li[span[contains(text(),'ROE')]]/span[2]"
-    #     )
-    
-    #     data["Face"] = get_text(
-    #         "//li[span[contains(text(),'Face Value')]]/span[2]"
-    #     )
-    
-    #     data["Promoters"] = get_text(
-    #         "//li[span[contains(text(),'Promoter holding')]]/span[2]"
-    #     )
-    
-    #     data["PLDGE"] = get_text(
-    #         "//li[span[contains(text(),'Pledged percentage')]]/span[2]"
-    #     )
-    
-    #     data["DEBT"] = get_text(
-    #         "//li[span[contains(text(),'Debt')]]/span[2]"
-    #     )
-    
-    #     data["INDPE"] = get_text(
-    #         "//li[span[contains(text(),'Industry PE')]]/span[2]"
-    #     )
-    
-    #     data["FII"] = get_text(
-    #         "//li[span[contains(text(),'FII')]]/span[2]"
-    #     )
-    
-    #     data["DII"] = get_text(
-    #         "//li[span[contains(text(),'DII')]]/span[2]"
-    #     )
-    
+    #     # SUMMARY
+    #     for li in page.query_selector_all(".company-ratios li"):
+    #         name = li.query_selector("span.name").inner_text().strip()
+    #         val_el = li.query_selector("span.nowrap span.number, span.number")
+    #         val = val_el.inner_text().strip() if val_el else ""
+
+    #         if name == "Stock P/E":
+    #             data["PE"] = val
+    #         elif name == "Book Value":
+    #             data["BOKVAL"] = val
+    #         elif name == "Dividend Yield":
+    #             data["DIVDND"] = val
+    #         elif name == "ROCE":
+    #             data["ROCE"] = val
+    #         elif name == "ROE":
+    #             data["ROE"] = val
+    #         elif name == "Face Value":
+    #             data["Face"] = val
+
+
+    #     # TOP RATIOS
+    #     for li in page.query_selector_all("#top-ratios li"):
+    #         name = li.query_selector("span.name").inner_text().strip()
+    #         val_el = li.query_selector("span.nowrap span.number, span.number")
+    #         val = val_el.inner_text().strip() if val_el else ""
+
+    #         lname = name.lower()
+
+    #         if "industry PE" in lname:
+    #             data["INDPE"] = val
+            
+    #         elif "fii holding" in lname:
+    #             data["FII"] = val
+            
+    #         elif "dii holding" in lname:
+    #             data["DII"] = val
+    #         elif "Debt" in lname:
+    #             data["DEBT"] = val
+            
+    #         elif "Pledged percentage" in lname:
+    #             data["PLDGE"] = val        
+
+
+    #     # PROMOTERS
+    #     for row in page.query_selector_all("#shareholding table tr"):
+    #         if "Promoter holding" in row.inner_text():
+    #             cols = row.query_selector_all("td")
+    #             if cols:
+    #                 data["Promoters"] = cols[-1].inner_text().strip()
+    #             break
+
     #     return data
+    def extract():
+
+        def get_text(xpath):
+            try:
+                return page.locator(f"xpath={xpath}").inner_text().strip()
+            except:
+                return ""
+    
+        data = {}
+    
+        data["PE"] = get_text(
+            "//li[span[contains(text(),'Stock P/E')]]/span[2]"
+        )
+    
+        data["BOKVAL"] = get_text(
+            "//li[span[contains(text(),'Book Value')]]/span[2]"
+        )
+    
+        data["DIVDND"] = get_text(
+            "//li[span[contains(text(),'Dividend Yield')]]/span[2]"
+        )
+    
+        data["ROCE"] = get_text(
+            "//li[span[contains(text(),'ROCE')]]/span[2]"
+        )
+    
+        data["ROE"] = get_text(
+            "//li[span[contains(text(),'ROE')]]/span[2]"
+        )
+    
+        data["Face"] = get_text(
+            "//li[span[contains(text(),'Face Value')]]/span[2]"
+        )
+    
+        data["Promoters"] = get_text(
+            "//li[span[contains(text(),'Promoter holding')]]/span[2]"
+        )
+    
+        data["PLDGE"] = get_text(
+            "//li[span[contains(text(),'Pledged percentage')]]/span[2]"
+        )
+    
+        data["DEBT"] = get_text(
+            "//li[span[contains(text(),'Debt')]]/span[2]"
+        )
+    
+        data["INDPE"] = get_text(
+            "//li[span[contains(text(),'Industry PE')]]/span[2]"
+        )
+    
+        data["FII"] = get_text(
+            "//li[span[contains(text(),'FII')]]/span[2]"
+        )
+    
+        data["DII"] = get_text(
+            "//li[span[contains(text(),'DII')]]/span[2]"
+        )
+    
+        return data
     # 🔹 TRY CONSOLIDATED
     page.goto(f"https://www.screener.in/company/{symbol}/consolidated/")
     try:
