@@ -4,7 +4,8 @@ from playwright.sync_api import sync_playwright
 import time
 import json
 import os
-
+from datetime import datetime
+from zoneinfo import ZoneInfo
 SCREENER_EMAIL    = os.environ.get("EMAIL")
 SCREENER_PASSWORD = os.environ.get("PASSWORD")
 GOOGLE_CREDS_JSON = os.environ.get("NEW")  # JSON string
@@ -159,7 +160,18 @@ if __name__ == "__main__":
 
             print(f"✅ Row {row_num} updated")
             time.sleep(0.4)
+        timestamp = datetime.now(
+            ZoneInfo("Asia/Kolkata")
+        ).strftime("%d-%m-%Y %H:%M:%S IST")
+
+        last_row = len(symbols) + DATA_START_ROW + 2
+
+        sheet.update(
+            values=[[f"Last Updated: {timestamp}"]],
+            range_name=f"M{last_row}"
+        )
 
         browser.close()
+
 
     print("\n🎉 DONE")
