@@ -180,17 +180,63 @@ if __name__ == "__main__":
             "https://www.googleapis.com/auth/drive"
         ]
     )
-    sheet = gspread.authorize(creds).open_by_key(SHEET_ID).worksheet(SHEET_TAB)
-
+    #sheet = gspread.authorize(creds).open_by_key(SHEET_ID).worksheet(SHEET_TAB)
+    gc = gspread.authorize(creds)
+    
+    flist_sheet = gc.open_by_key(SHEET_ID).worksheet("FLIST")
+    nt_sheet = gc.open_by_key(SHEET_ID).worksheet("nt")
+    # =====================================================
+    # Sync NT -> FLIST
+    # =====================================================
+    
+    # Existing symbols in FLIST
+    existing_symbols = {
+        row[1].strip().upper()
+        for row in flist_sheet.get_all_values()[DATA_START_ROW-1:]
+        if len(row) > 1 and row[1].strip()
+    }
+    
+    # Read every row from NT
+    nt_rows = nt_sheet.get_all_values()[DATA_START_ROW-1:]
+    
+    rows_to_append = []
+    
+    for row in nt_rows:
+    
+        if len(row) < 2:
+            continue
+    
+        stock = row[0].strip().upper()
+        symbol = row[1].strip().upper()
+        
+        key = symbol if symbol else stock
+    
+        if not symbol:
+            continue
+    
+        if symbol not in existing_symbols:
+    
+            # Make row length same as FLIST
+            while len(row) < len(flist_sheet.row_values(1)):
+                row.append("")
+    
+            rows_to_append.append(row)
+            existing_symbols.add(symbol)
+    
+    if rows_to_append:
+        flist_sheet.append_rows(rows_to_append)
+        print(f"✅ {len(rows_to_append)} new stocks added to FLIST")
+    else:
+        print("✅ No new stocks found")    
     symbols = [
         s.strip().upper()
-        for s in sheet.col_values(2)[DATA_START_ROW - 1:]
+        for s in flist_sheet.col_values(2)[DATA_START_ROW - 1:]
         if s.strip()
     ]
 
     print(f"📋 {len(symbols)} symbols found")
 
-    sheet.update(values=[OUTPUT_HEADERS], range_name="M1:X1")
+    flist_sheet.update(values=[OUTPUT_HEADERS], range_name="M1:X1")
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -211,7 +257,7 @@ if __name__ == "__main__":
             row_values = [data.get(h, "") for h in OUTPUT_HEADERS]
 
             # ✅ ROW BY ROW UPDATE
-            sheet.update(
+            flist_sheet.update(
                 values=[row_values],
                 range_name=f"M{row_num}:X{row_num}"
             )
@@ -224,7 +270,7 @@ if __name__ == "__main__":
 
         last_row = len(symbols) + DATA_START_ROW + 2
 
-        sheet.update(
+        flist_sheet.update(
             values=[[f"Last Updated: {timestamp}"]],
             range_name=f"M{last_row}"
         )
