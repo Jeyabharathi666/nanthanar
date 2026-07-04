@@ -12,9 +12,6 @@ with open("creds.json", "w") as f:
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
 WORKSHEET_NAME = "FLIST"
 CREDENTIALS_FILE = "creds.json"
-flist_sheet = client.open_by_key(SHEET_ID).worksheet("FLIST")
-
-nt_sheet = client.open_by_key(SHEET_ID).worksheet("nt")
 scope = [
     'https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/drive'
@@ -50,44 +47,7 @@ def get_sector(symbol):
         print(f"⚠️ Failed for {symbol}: {e}")
         _cache[symbol] = "Unknown"
         return "Unknown"
-# ==========================================================
-# Sync NT -> FLIST
-# ==========================================================
 
-# Existing symbols in FLIST
-existing_symbols = {
-    s.strip().upper()
-    for s in flist_sheet.col_values(2)[3:]
-    if s.strip()
-}
-
-# Read complete rows from NT
-nt_rows = nt_sheet.get_all_values()[3:]
-
-rows_to_append = []
-
-for row in nt_rows:
-
-    if len(row) < 2:
-        continue
-
-    symbol = row[1].strip().upper()
-
-    if symbol and symbol not in existing_symbols:
-
-        rows_to_append.append(row)
-
-        existing_symbols.add(symbol)
-
-if rows_to_append:
-
-    flist_sheet.append_rows(rows_to_append)
-
-    print(f"✅ Added {len(rows_to_append)} new stocks to FLIST")
-
-else:
-
-    print("✅ FLIST already up to date")
 # === Read symbols starting from B4 ===
 symbols = sheet.col_values(2)[3:]   # skip first 3 rows
 
