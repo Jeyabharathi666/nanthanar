@@ -217,7 +217,10 @@ if __name__ == "__main__":
         if symbol not in existing_symbols:
     
             # Make row length same as FLIST
-            while len(row) < len(flist_sheet.row_values(1)):
+            flist_data = flist_sheet.get_all_values()
+
+            header_length = len(flist_data[0])
+            while len(row) < header_length:
                 row.append("")
     
             rows_to_append.append(row)
