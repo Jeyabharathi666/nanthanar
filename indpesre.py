@@ -206,10 +206,10 @@ if __name__ == "__main__":
         if len(row) < 2:
             continue
     
-        stock = row[0].strip().upper()
+       
         symbol = row[1].strip().upper()
         
-        key = symbol if symbol else stock
+       
     
         if not symbol:
             continue
