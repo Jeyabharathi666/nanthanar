@@ -1,4 +1,4 @@
-name: Run INDPE Everyday Midnight
+name: Run Screener Everyday Midnight
 
 on:
   schedule:
