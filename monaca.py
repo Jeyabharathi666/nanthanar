@@ -8,7 +8,7 @@ from google_sheets import get_google_credentials, authorize_google_sheets
 # === CONFIG ===
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
 WORKSHEET_NAME = "nt"
-API_URL = "https://api.moneycontrol.com/mcapi/v1/broker-research/get-analysts-choice?start=0&limit=500&sortBy=broker_count&deviceType=W"
+API_URL = "https://api.moneycontrol.com/mcapi/v1/broker-research/get-analysts-choice?start=0&limit=24&sortBy=broker_count&deviceType=W"
 
 # === HEADERS ===
 headers = {
@@ -72,7 +72,7 @@ rows = [[
 for idea in stock_ideas:
     try:
         name = idea.get("stkname", "N/A")
-        analysts = idea.get("broker_count", "N/A")
+       # analysts = idea.get("buy_count", "N/A")
         buys = idea.get("buy_count", "N/A")
         holds = idea.get("hold_count", "N/A")
         cmp = idea.get("cmp", "N/A")
@@ -93,7 +93,7 @@ for idea in stock_ideas:
                 high_pct = target.get("percentages", "N/A") or "N/A"
 
         rows.append([
-            name, buys, holds, cmp,analysts,
+            name, buys, holds, cmp,
             low_val, low_pct,
             avg_val, avg_pct,
             high_val, high_pct
