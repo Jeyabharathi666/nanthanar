@@ -124,7 +124,8 @@ for i, name in enumerate(company_names, start=1):
 
 # === Single batch write to column B (avoids rate limiting) ===
 if updates:
-    sheet.update(f"B1:B{len(updates)}", updates)
+    sheet.update("B1", [["NSE Symbol"]])
+    sheet.update(f"B1:B{len(updates)+1}", updates)
     print(f"\n✅ Written {len(updates)} rows to column B in one batch.")
 
 # === Update NSE_LIST sheet ===
