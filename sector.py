@@ -10,7 +10,7 @@ with open("creds.json", "w") as f:
 
 # === Google Sheets Setup ===
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
-WORKSHEET_NAME = "FLIST"
+WORKSHEET_NAME = "FULL"
 CREDENTIALS_FILE = "creds.json"
 scope = [
     'https://spreadsheets.google.com/feeds',
