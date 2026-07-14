@@ -8,7 +8,7 @@ from google_sheets import get_google_credentials, authorize_google_sheets
 # === CONFIG ===
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
 WORKSHEET_NAME = "FULL"
-API_URL = "https://api.moneycontrol.com/mcapi/v1/broker-research/get-analysts-choice?start=0&limit=24&sortBy=broker_count&deviceType=W"
+API_URL = "https://api.moneycontrol.com/mcapi/v1/broker-research/get-analysts-choice?start=0&limit=540&sortBy=broker_count&deviceType=W"
 
 # === HEADERS ===
 headers = {
