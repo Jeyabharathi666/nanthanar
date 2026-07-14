@@ -110,7 +110,7 @@ equity_df['NAME_NORM'] = (
 )
 
 # === Batch read + batch write (fewer API calls = faster + no rate limits) ===
-company_names = sheet.col_values(1)
+company_names = sheet.col_values(1)[1:]
 updates = []  # Collect all updates, write in one batch
 
 for i, name in enumerate(company_names, start=1):
