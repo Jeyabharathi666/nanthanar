@@ -27,5 +27,5 @@ jobs:
           NEW: ${{ secrets.NEW }}
         run: |
           python monaca.py
-          # python nse.py
-          # python sector.py
+          python nse.py
+          python sector.py
