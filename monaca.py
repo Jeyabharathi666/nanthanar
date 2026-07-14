@@ -63,7 +63,7 @@ except Exception as e:
 
 # === PREPARE DATA ===
 rows = [[
-    "Stock", "Buys", "Holds", "CMP","Analysts",
+    "Stock", "Buys", "Holds", "CMP",
     "Low (₹)", "Low (%)",
     "Avg (₹)", "Avg (%)",
     "High (₹)", "High (%)"
