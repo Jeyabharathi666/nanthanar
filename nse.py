@@ -89,7 +89,7 @@ def get_nse_code(user_input, df):
 
 # === Google Sheets Setup ===
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
-WORKSHEET_NAME = "nt"
+WORKSHEET_NAME = "FULL"
 CREDENTIALS_FILE = "creds.json"
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
