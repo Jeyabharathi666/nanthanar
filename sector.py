@@ -76,7 +76,7 @@ end_row = len(sector_updates) + 3
 
 sheet.update(
     values=sector_updates,
-    range_name=f"C4:C{end_row}"
+    range_name=f"D4:D{end_row}"
 )
 
 print(f"\n✅ Sectors written to C4:C{end_row}")
