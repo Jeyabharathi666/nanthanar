@@ -10,7 +10,7 @@ SCREENER_EMAIL    = os.environ.get("EMAIL")
 SCREENER_PASSWORD = os.environ.get("PASSWORD")
 GOOGLE_CREDS_JSON = os.environ.get("NEW")  # JSON string
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
-SHEET_TAB = "FLIST"
+SHEET_TAB = "FULL"
 DATA_START_ROW = 4
 
 OUTPUT_HEADERS = [
