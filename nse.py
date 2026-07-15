@@ -122,10 +122,12 @@ for i, name in enumerate(company_names, start=1):
         print(f"❌ Error at row {i} ({name}): {e}")
         updates.append(["ERROR"])
 
-# === Single batch write to column B (avoids rate limiting) ===
+# === Single batch write to column B (avoids rate limiting) ===# Header
+sheet.update("B1", [["NSE Symbol"]])
+
+# Data starts from row 2
 if updates:
-    sheet.update("B1", [["NSE Symbol"]])
-    sheet.update(f"B1:B{len(updates)+1}", updates)
+    sheet.update(f"B2:B{len(updates)+1}", updates)
     print(f"\n✅ Written {len(updates)} rows to column B in one batch.")
 
 # === Update NSE_LIST sheet ===
