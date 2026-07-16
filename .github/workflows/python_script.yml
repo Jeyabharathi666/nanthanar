@@ -28,11 +28,11 @@ jobs:
         run: |
           # python monaca.py
           python nse.py
-      #     python sector.py
+          python sector.py
           
-      # - name: Run INDPE
-      #   env:
-      #     EMAIL: ${{ secrets.EMAIL }}
-      #     PASSWORD: ${{ secrets.PASSWORD }}
-      #     NEW: ${{ secrets.NEW2 }}
-      #   run: python indpesre.py
+      - name: Run INDPE
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          NEW: ${{ secrets.NEW2 }}
+        run: python indpesre.py
