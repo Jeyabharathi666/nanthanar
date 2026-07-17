@@ -156,7 +156,7 @@ def scrape_stock(page, symbol):
 
     # 🔴 SIMPLE FALLBACK
     if not data["INDPE"] or data["INDPE"] == "":
-        pri(f"→ fallback: {symbol}")
+        print(f"→ fallback: {symbol}")
 
         page.goto(f"https://www.screener.in/company/{symbol}/")
         try:
@@ -173,7 +173,7 @@ def scrape_stock(page, symbol):
 if __name__ == "__main__":
 
     creds_dict = json.loads(GOOGLE_CREDS_JSON)
-    creds = Credeials.from_service_accou_info(
+    creds = Credentials.from_service_account_info(
         creds_dict,
         scopes=[
             "https://www.googleapis.com/auth/spreadsheets",
