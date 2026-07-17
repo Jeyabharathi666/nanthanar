@@ -2,7 +2,7 @@ name: Run Scripts Every 5 Hours
 
 on:
   schedule:
-    - cron: "0 */5 * * *"   # every 3 hours
+    - cron: "30 18 * * *"
   workflow_dispatch:
 
 jobs:
