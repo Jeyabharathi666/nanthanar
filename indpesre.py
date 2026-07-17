@@ -11,7 +11,7 @@ SCREENER_PASSWORD = os.environ.get("PASSWORD")
 GOOGLE_CREDS_JSON = os.environ.get("NEW")  # JSON string
 SHEET_ID = "1VtgTb36SB65HtQQpjcagh4cxr7pDGcLzGpR9ScE4vdA"
 SHEET_TAB = "FULL"
-DATA_START_ROW = 4
+DATA_START_ROW = 2
 
 OUTPUT_HEADERS = [
     "PE", "BOKVAL", "DIVDND",
@@ -29,62 +29,6 @@ def login(page):
     print("✅ Logged in")
 
 def scrape_stock(page, symbol):
-
-    # def extract():
-    #     data = {h: "" for h in OUTPUT_HEADERS}
-
-    #     # SUMMARY
-    #     for li in page.query_selector_all(".company-ratios li"):
-    #         name = li.query_selector("span.name").inner_text().strip()
-    #         val_el = li.query_selector("span.nowrap span.number, span.number")
-    #         val = val_el.inner_text().strip() if val_el else ""
-
-    #         if name == "Stock P/E":
-    #             data["PE"] = val
-    #         elif name == "Book Value":
-    #             data["BOKVAL"] = val
-    #         elif name == "Dividend Yield":
-    #             data["DIVDND"] = val
-    #         elif name == "ROCE":
-    #             data["ROCE"] = val
-    #         elif name == "ROE":
-    #             data["ROE"] = val
-    #         elif name == "Face Value":
-    #             data["Face"] = val
-
-
-    #     # TOP RATIOS
-    #     for li in page.query_selector_all("#top-ratios li"):
-    #         name = li.query_selector("span.name").inner_text().strip()
-    #         val_el = li.query_selector("span.nowrap span.number, span.number")
-    #         val = val_el.inner_text().strip() if val_el else ""
-
-    #         lname = name.lower()
-
-    #         if "industry PE" in lname:
-    #             data["INDPE"] = val
-            
-    #         elif "fii holding" in lname:
-    #             data["FII"] = val
-            
-    #         elif "dii holding" in lname:
-    #             data["DII"] = val
-    #         elif "Debt" in lname:
-    #             data["DEBT"] = val
-            
-    #         elif "Pledged percentage" in lname:
-    #             data["PLDGE"] = val        
-
-
-    #     # PROMOTERS
-    #     for row in page.query_selector_all("#shareholding table tr"):
-    #         if "Promoter holding" in row.inner_text():
-    #             cols = row.query_selector_all("td")
-    #             if cols:
-    #                 data["Promoters"] = cols[-1].inner_text().strip()
-    #             break
-
-    #     return data
     def extract():
 
         def get_text(xpath):
@@ -282,3 +226,15 @@ if __name__ == "__main__":
 
 
     print("\n🎉 DONE")
+
+
+
+now i have data on FULL sheet noe i need to filter this to FLIST 
+
+
+
+Stock	NSE Symbol	Buys		CMP	Low (₹)	Low (%)	Avg (₹)	Avg (%)	High (₹)	High (%)	PE	BOKVAL	DIVDND	ROCE	ROE	Face	INDPE	FII	DII	DEBT	PLDGE	Promoters	 this is structure of FULL sheet from A to W
+
+
+
+if we have word "Bank" in the stock name then dont apply the following conditions and pull those data directly to the 
