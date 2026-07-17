@@ -143,6 +143,10 @@ if __name__ == "__main__":
     # Read every row from NT
     nt_rows = nt_sheet.get_all_values()[DATA_START_ROW-1:]
     
+    # Read FLIST only once
+    flist_data = flist_sheet.get_all_values()
+    header_length = len(flist_data[0])
+    
     rows_to_append = []
     
     for row in nt_rows:
@@ -150,20 +154,13 @@ if __name__ == "__main__":
         if len(row) < 2:
             continue
     
-       
         symbol = row[1].strip().upper()
-        
-       
     
         if not symbol:
             continue
     
         if symbol not in existing_symbols:
     
-            # Make row length same as FLIST
-            flist_data = flist_sheet.get_all_values()
-
-            header_length = len(flist_data[0])
             while len(row) < header_length:
                 row.append("")
     
@@ -182,8 +179,17 @@ if __name__ == "__main__":
     ]
 
     print(f"📋 {len(symbols)} symbols found")
-
-    flist_sheet.update(values=[OUTPUT_HEADERS], range_name="M1:X1")
+    for attempt in range(5):
+        try:
+            flist_sheet.update(
+                values=[OUTPUT_HEADERS],
+                range_name="M1:X1"
+            )
+            break
+        except Exception as e:
+            print(f"Header Retry {attempt+1}: {e}")
+            time.sleep(2)
+    
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -204,10 +210,16 @@ if __name__ == "__main__":
             row_values = [data.get(h, "") for h in OUTPUT_HEADERS]
 
             # ✅ ROW BY ROW UPDATE
-            flist_sheet.update(
-                values=[row_values],
-                range_name=f"M{row_num}:X{row_num}"
-            )
+            for attempt in range(5):
+                try:
+                    flist_sheet.update(
+                        values=[row_values],
+                        range_name=f"M{row_num}:X{row_num}"
+                    )
+                    break
+                except Exception as e:
+                    print(f"Retry {attempt+1}: {e}")
+                    time.sleep(2)
 
             print(f"✅ Row {row_num} updated")
             time.sleep(0.4)
@@ -217,10 +229,16 @@ if __name__ == "__main__":
 
         last_row = len(symbols) + DATA_START_ROW + 2
 
-        flist_sheet.update(
-            values=[[f"Last Updated: {timestamp}"]],
-            range_name=f"M{last_row}"
-        )
+        for attempt in range(5):
+            try:
+                flist_sheet.update(
+                    values=[[f"Last Updated: {timestamp}"]],
+                    range_name=f"M{last_row}"
+                )
+                break
+            except Exception as e:
+                print(f"Timestamp Retry {attempt+1}: {e}")
+                time.sleep(2)
 
         browser.close()
 
