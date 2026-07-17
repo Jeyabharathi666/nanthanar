@@ -156,7 +156,7 @@ def scrape_stock(page, symbol):
 
     # 🔴 SIMPLE FALLBACK
     if not data["INDPE"] or data["INDPE"] == "":
-        print(f"→ fallback: {symbol}")
+        pri(f"→ fallback: {symbol}")
 
         page.goto(f"https://www.screener.in/company/{symbol}/")
         try:
@@ -173,7 +173,7 @@ def scrape_stock(page, symbol):
 if __name__ == "__main__":
 
     creds_dict = json.loads(GOOGLE_CREDS_JSON)
-    creds = Credentials.from_service_account_info(
+    creds = Credeials.from_service_accou_info(
         creds_dict,
         scopes=[
             "https://www.googleapis.com/auth/spreadsheets",
@@ -184,7 +184,7 @@ if __name__ == "__main__":
     gc = gspread.authorize(creds)
     
     flist_sheet = gc.open_by_key(SHEET_ID).worksheet("FLIST")
-    nt_sheet = gc.open_by_key(SHEET_ID).worksheet("nt")
+    nt_sheet = gc.open_by_key(SHEET_ID).worksheet("FULL")
     # =====================================================
     # Sync NT -> FLIST
     # =====================================================
