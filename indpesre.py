@@ -228,13 +228,3 @@ if __name__ == "__main__":
     print("\n🎉 DONE")
 
 
-
-now i have data on FULL sheet noe i need to filter this to FLIST 
-
-
-
-Stock	NSE Symbol	Buys		CMP	Low (₹)	Low (%)	Avg (₹)	Avg (%)	High (₹)	High (%)	PE	BOKVAL	DIVDND	ROCE	ROE	Face	INDPE	FII	DII	DEBT	PLDGE	Promoters	 this is structure of FULL sheet from A to W
-
-
-
-if we have word "Bank" in the stock name then dont apply the following conditions and pull those data directly to the 
