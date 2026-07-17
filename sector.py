@@ -49,13 +49,13 @@ def get_sector(symbol):
         return "Unknown"
 
 # === Read symbols starting from B4 ===
-symbols = sheet.col_values(2)[3:]   # skip first 3 rows
+symbols = sheet.col_values(2)[1:]   # skip first 3 rows
 
-print(f"📋 Found {len(symbols)} symbols from B4\n")
+print(f"📋 Found {len(symbols)} symbols from B2\n")
 
 sector_updates = []
 
-for i, symbol in enumerate(symbols, start=4):
+for i, symbol in enumerate(symbols, start=2):
 
     symbol = symbol.strip()
 
@@ -72,11 +72,11 @@ for i, symbol in enumerate(symbols, start=4):
     time.sleep(0.4)
 
 # === Write to column C starting from C4 ===
-end_row = len(sector_updates) + 3
+end_row = len(sector_updates) + 1
 
 sheet.update(
     values=sector_updates,
-    range_name=f"D4:D{end_row}"
+    range_name=f"D2:D{end_row}"
 )
 
 print(f"\n✅ Sectors written to C4:C{end_row}")
