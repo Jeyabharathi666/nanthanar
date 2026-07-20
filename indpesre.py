@@ -127,7 +127,7 @@ if __name__ == "__main__":
     #sheet = gspread.authorize(creds).open_by_key(SHEET_ID).worksheet(SHEET_TAB)
     gc = gspread.authorize(creds)
     
-    flist_sheet = gc.open_by_key(SHEET_ID).worksheet("FLIST")
+    flist_sheet = gc.open_by_key(SHEET_ID).worksheet("FULL")
     nt_sheet = gc.open_by_key(SHEET_ID).worksheet("FULL")
     # =====================================================
     # Sync NT -> FLIST
