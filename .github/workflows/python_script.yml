@@ -26,9 +26,9 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           NEW: ${{ secrets.NEW }}
         run: |
-          # python monaca.py
-          python nse.py
-      #     python sector.py
+           # python monaca.py
+           # python nse.py
+           python sector.py
           
       # - name: Run INDPE
       #   env:
