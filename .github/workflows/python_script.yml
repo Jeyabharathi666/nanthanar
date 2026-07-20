@@ -20,19 +20,19 @@ jobs:
           pip install -r requirements.txt
           python -m playwright install --with-deps
 
-      # - name: Run scripts (5hr)
-      #   env:
-      #     EMAIL: ${{ secrets.EMAIL }}
-      #     PASSWORD: ${{ secrets.PASSWORD }}
-      #     NEW: ${{ secrets.NEW }}
-      #   run: |
-      #     # python monaca.py
-      #     python nse.py
-      #     python sector.py
-          
-      - name: Run INDPE
+      - name: Run scripts (5hr)
         env:
           EMAIL: ${{ secrets.EMAIL }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          NEW: ${{ secrets.NEW2 }}
-        run: python indpesre.py
+          NEW: ${{ secrets.NEW }}
+        run: |
+          # python monaca.py
+          python nse.py
+      #     python sector.py
+          
+      # - name: Run INDPE
+      #   env:
+      #     EMAIL: ${{ secrets.EMAIL }}
+      #     PASSWORD: ${{ secrets.PASSWORD }}
+      #     NEW: ${{ secrets.NEW2 }}
+      #   run: python indpesre.py
