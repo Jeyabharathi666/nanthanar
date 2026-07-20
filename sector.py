@@ -124,12 +124,12 @@ def get_sector(symbol):
         _cache[symbol] = "Unknown"
         return "Unknown"
 
-# === Read symbols starting from B4 ===
-symbols = sheet.col_values(2)[3:]   # skip rows 1-3, data starts at row 4
-print(f"📋 Found {len(symbols)} symbols from B4\n")
+# === Read symbols starting from B2 ===
+symbols = sheet.col_values(2)[1:]   # skip header row 1, data starts at row 2
+print(f"📋 Found {len(symbols)} symbols from B2\n")
 
 sector_updates = []
-for i, symbol in enumerate(symbols, start=4):
+for i, symbol in enumerate(symbols, start=2):
     symbol = symbol.strip()
     if not symbol:
         sector_updates.append([""])
@@ -139,10 +139,10 @@ for i, symbol in enumerate(symbols, start=4):
     sector_updates.append([sector])
     time.sleep(0.4)
 
-# === Write to column D starting from D4 ===
-end_row = len(sector_updates) + 3
+# === Write to column D starting from D2 ===
+end_row = len(sector_updates) + 1
 sheet.update(
     values=sector_updates,
-    range_name=f"D4:D{end_row}"
+    range_name=f"D2:D{end_row}"
 )
-print(f"\n✅ Sectors written to D4:D{end_row}")
+print(f"\n✅ Sectors written to D2:D{end_row}")
