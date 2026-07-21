@@ -1,28 +1,28 @@
-name: Run Screener Everyday Midnight
+# name: Run Screener Everyday Midnight
 
-on:
-  schedule:
-    - cron: "30 18 * * *"  #everydat midnight
-  workflow_dispatch:
+# on:
+#   schedule:
+#     - cron: "30 18 * * *"  #everydat midnight
+#   workflow_dispatch:
 
-jobs:
-  run-indpe:
-    runs-on: ubuntu-latest
+# jobs:
+#   run-indpe:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
+#       - uses: actions/setup-python@v4
+#         with:
+#           python-version: "3.10"
 
-      - run: |
-          pip install -r requirements.txt
-          python -m playwright install --with-deps
+#       - run: |
+#           pip install -r requirements.txt
+#           python -m playwright install --with-deps
 
-      - name: Run INDPE
-        env:
-          EMAIL: ${{ secrets.EMAIL }}
-          PASSWORD: ${{ secrets.PASSWORD }}
-          NEW: ${{ secrets.NEW2 }}
-        run: python indpesre.py
+#       - name: Run INDPE
+#         env:
+#           EMAIL: ${{ secrets.EMAIL }}
+#           PASSWORD: ${{ secrets.PASSWORD }}
+#           NEW: ${{ secrets.NEW2 }}
+#         run: python indpesre.py
