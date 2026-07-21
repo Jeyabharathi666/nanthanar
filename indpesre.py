@@ -183,7 +183,7 @@ if __name__ == "__main__":
         try:
             flist_sheet.update(
                 values=[OUTPUT_HEADERS],
-                range_name="M1:X1"
+                range_name="L1:W1"
             )
             break
         except Exception as e:
@@ -214,7 +214,7 @@ if __name__ == "__main__":
                 try:
                     flist_sheet.update(
                         values=[row_values],
-                        range_name=f"M{row_num}:X{row_num}"
+                        range_name=f"L{row_num}:W{row_num}"
                     )
                     break
                 except Exception as e:
